@@ -43,7 +43,7 @@ namespace MatchEngine.Controllers
         {
             _logger.LogDebug("{0}: Put StandaloneMatch Reset", Request.HttpContext.Connection.RemoteIpAddress);
 
-            var json = Api.StandaloneMatch.SetStandaloneMatchGoals(teamIndex, score);
+            Api.StandaloneMatch.SetStandaloneMatchGoals(teamIndex, score);
 
             return new OkResult();
         }
