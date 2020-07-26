@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MatchEngine.Database;
-using MatchLibrary.Model;
+using MatchEngine.DatabaseModel;
+using MatchLibrary.PotentialModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;

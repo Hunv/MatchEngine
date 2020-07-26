@@ -43,7 +43,7 @@ namespace MatchEngine.Controllers
             _logger.LogDebug("{0}: Put StandaloneMatch Time START", Request.HttpContext.Connection.RemoteIpAddress);
 
             //Start the timer to count down the time
-            //todo
+            MatchLogic.StandaloneMatch.Start();
 
             return new OkResult();
         }
@@ -58,7 +58,7 @@ namespace MatchEngine.Controllers
             _logger.LogDebug("{0}: Put StandaloneMatch Time STOP", Request.HttpContext.Connection.RemoteIpAddress);
 
             //Stop the timer to count down the time
-            //todo
+            MatchLogic.StandaloneMatch.Stop();
 
             return new OkResult();
         }

@@ -121,6 +121,23 @@ namespace MatchEngine.DatabaseModel
                     .WithOne(p => p.RefereeMatch);
             });
 
+
+            modelBuilder.Entity<StandaloneMatch>().ToTable("StandaloneMatch");
+            modelBuilder.Entity<StandaloneMatch>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasMany(e => e.Teams)
+                    .WithOne(p => p.StandaloneMatch);
+                
+            });
+
+
+            modelBuilder.Entity<StandaloneTeam>().ToTable("StandaloneTeams");
+            modelBuilder.Entity<StandaloneTeam>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }

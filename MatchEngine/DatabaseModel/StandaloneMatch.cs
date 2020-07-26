@@ -8,6 +8,11 @@ namespace MatchEngine.DatabaseModel
     public class StandaloneMatch
     {
         /// <summary>
+        /// A dummy Id for the standalone match
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// The teams, that participate on that match
         /// </summary>
         public List<StandaloneTeam> Teams { get; set; }

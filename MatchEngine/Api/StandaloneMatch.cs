@@ -1,5 +1,6 @@
 ﻿using MatchEngine.DatabaseModel;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace MatchEngine.Api
         {
             using (var dbContext = new MyDbContext())
             {
-                var json = JsonConvert.SerializeObject(dbContext.StandaloneMatch, Helper.GetJsonSerializer());
+                var json = JsonConvert.SerializeObject(dbContext.StandaloneMatch.Include("Teams"), Helper.GetJsonSerializer());
                 return json;                
             }
         }
@@ -31,7 +32,12 @@ namespace MatchEngine.Api
         {
             using (var dbContext = new MyDbContext())
             {
-                var json = JsonConvert.SerializeObject(dbContext.StandaloneMatch.First().SecondsLeft, Helper.GetJsonSerializer());
+                var match = dbContext.StandaloneMatch;
+                var timeleft = 0;
+                if (match.Count() > 0)
+                    timeleft = match.First().SecondsLeft;
+
+                var json = JsonConvert.SerializeObject(timeleft, Helper.GetJsonSerializer());
                 return json;
             }
         }
@@ -45,6 +51,7 @@ namespace MatchEngine.Api
             using (var dbContext = new MyDbContext())
             {
                 dbContext.StandaloneMatch.First().SecondsLeft = timeLeft;
+                dbContext.SaveChanges();
             }
         }
 
@@ -71,7 +78,10 @@ namespace MatchEngine.Api
         {
             using (var dbContext = new MyDbContext())
             {
-                dbContext.StandaloneTeams.ElementAt(teamIndex).Score += score;
+                var team = dbContext.StandaloneTeams.Take(teamIndex + 1).AsEnumerable().Last();
+                team.Score += score;
+                    
+                dbContext.SaveChanges();
             }
         }
 
@@ -90,6 +100,7 @@ namespace MatchEngine.Api
                 dbContext.StandaloneTeams.Add(new StandaloneTeam() { Score = 0 });
 
                 SetStandaloneMatchTime(0);
+                dbContext.SaveChanges();
             }
         }
     }

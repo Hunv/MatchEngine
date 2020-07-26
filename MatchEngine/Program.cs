@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using MatchEngine.Database;
+using MatchEngine.DatabaseModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -18,7 +18,12 @@ namespace MatchEngine
             //Ensure database is created
             using (var dbContext = new MyDbContext())
             {   
-                dbContext.Database.EnsureCreated();
+                var created = dbContext.Database.EnsureCreated();
+                if (created)
+                {
+                    dbContext.StandaloneMatch.Add(new StandaloneMatch() { Teams = new List<StandaloneTeam>() { new StandaloneTeam(), new StandaloneTeam() } });
+                    dbContext.SaveChanges();
+                }
             }
 
             CreateHostBuilder(args).Build().Run();
