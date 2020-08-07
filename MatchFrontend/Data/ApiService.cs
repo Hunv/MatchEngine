@@ -12,12 +12,17 @@ namespace MatchFrontend.Data
 {
     public class ApiService
     {
-#if DEBUG
-        private static readonly string _ServerBaseUrl = "https://localhost:44302/api/";
-#else
-        private static readonly string _ServerBaseUrl = "http://localhost:5000/api/";
-#endif
+//#if DEBUG
+//        private static readonly string _ServerBaseUrl = "https://localhost:44302/api/";
+//#else
+        private static readonly string _ServerBaseUrl = "https://localhost:5001/api/";
+//#endif
         
+        public ApiService()
+        {
+            Console.WriteLine("Using Serverbase URL " + _ServerBaseUrl);
+        }
+
         /// <summary>
         /// Gets a Match
         /// </summary>
