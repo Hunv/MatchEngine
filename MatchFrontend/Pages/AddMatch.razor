@@ -1,0 +1,52 @@
+﻿
+@page "/addmatch"
+@using MatchFrontend.Data
+@using System.Net.Http
+@using System.Web
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+
+
+<h1>Match erstellen</h1>
+
+@if (1==2) @*(teamList == null || refereeList == null)*@
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@newMatch" OnValidSubmit="@SaveMatch">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <a>Team1</a>
+    <input id="txtLenght" class="form-control" type="text" @bind="@newMatch.NameTeam1" />
+    <br />
+
+    <a>Team2</a>
+    <input id="txtLenght" class="form-control" type="text" @bind="@newMatch.NameTeam2" />
+    <br />
+
+    <a>Halbzeitlänge in Sekunden</a>
+    <input id="txtLenght" class="form-control" type="text" @bind="newMatch.TimeLeftSeconds" />
+    <br />
+
+    <button class="btn btn-primary" type="submit">Speichern</button>
+</EditForm>
+}
+
+@code {
+    private DtoMatch newMatch = new DtoMatch();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+
+    private async void SaveMatch()
+    {
+        await ApiSrv.AddMatchAsync(newMatch);
+        NavigationManager.NavigateTo("/match");
+    }
+}

@@ -21,8 +21,7 @@ namespace MatchEngine
                 var created = dbContext.Database.EnsureCreated();
                 if (created)
                 {
-                    dbContext.StandaloneMatch.Add(new StandaloneMatch() { Teams = new List<StandaloneTeam>() { new StandaloneTeam(), new StandaloneTeam() } });
-                    dbContext.SaveChanges();
+                    //Do something
                 }
             }
 

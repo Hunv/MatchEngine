@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MatchEngine.Api
+namespace MatchLibrary
 {
     public class Helper
     {
@@ -19,6 +19,11 @@ namespace MatchEngine.Api
             };
 
             return js;
+        }
+
+        public static string SerializeObject(object data)
+        {
+            return (JsonConvert.SerializeObject(data, GetJsonSerializer()));
         }
     }
 }

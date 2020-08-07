@@ -1,0 +1,156 @@
+﻿
+@page "/match/{id}"
+@using MatchFrontend.Data
+@using System.Net.Http
+@using System.Web
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+
+@if (Match == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<EditForm Model="@Match" OnValidSubmit="@SaveMatch">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="text-center">
+        <table class="table">
+            <tr>
+                <td><h1>@Match.NameTeam1</h1></td>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td><h1>@Match.NameTeam2</h1></td>
+            </tr>
+            <tr>
+                <td><h1>@Match.ScoreTeam1</h1></td>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td><h1>@Match.ScoreTeam2</h1></td>
+            </tr>
+            <tr>
+                <td><button class="btn btn-primary" @onclick="GoalTeam1">Tor Team1</button></td>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td><button class="btn btn-primary" @onclick="GoalTeam2">Tor Team2</button></td>
+            </tr>
+            <tr>
+                <td><button class="btn btn-primary" @onclick="UngoalTeam1">Korrektur</button></td>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td><button class="btn btn-primary" @onclick="UngoalTeam2">Korrektur</button></td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <h1 class="text-center">Spielzeit:</h1>
+    <h1 class="text-center">@TimeLeftMinutes.ToString("D2"):@TimeLeftSeconds.ToString("D2")</h1>
+    <br />
+    <br />
+
+    <button class="btn btn-primary" @onclick="StartGame">Spiel starten</button>
+    &nbsp;&nbsp;
+    <button class="btn btn-primary" @onclick="StopGame">Spiel unterbrechen</button>
+    <br />
+    <br />
+    <br />
+
+    <a>Team1</a>
+    <input id="txtNameTeam1" class="form-control" type="text" @bind="@Match.NameTeam1" />
+    <br />
+
+    <a>Team2</a>
+    <input id="txtNameTeam2" class="form-control" type="text" @bind="@Match.NameTeam2" />
+    <br />
+
+    <a>Restzeit in Sekunden</a>
+    <input id="txtLenght" class="form-control" type="text" @bind="Match.TimeLeftSeconds" />
+    <br />
+
+    <a>Punkte Team1</a>
+    <input id="txtScoreTeam1" class="form-control" type="text" @bind="@Match.ScoreTeam1" />
+    <br />
+
+    <a>Punkte Team2</a>
+    <input id="txtScoreTeam2" class="form-control" type="text" @bind="@Match.ScoreTeam2" />
+    <br />
+
+    <button class="btn btn-primary" type="submit">Speichern</button>
+</EditForm>
+}
+
+@code {
+    private DtoMatch Match;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private int TimeLeftMinutes { get { return Match.TimeLeftSeconds.Value / 60; } }
+    private int TimeLeftSeconds { get { return Match.TimeLeftSeconds.Value % 60; } }
+    private System.Timers.Timer tmrMatchtime = new System.Timers.Timer(1000);
+
+    protected override async Task OnInitializedAsync()
+    {
+        Match = await ApiSrv.GetMatchAsync(Convert.ToInt32(Id));
+        tmrMatchtime.Elapsed += OnTmrMatchtimeElapsed;
+        tmrMatchtime.Start();
+    }
+
+    private async void SaveMatch()
+    {
+        await ApiSrv.SetMatchAsync(Match);
+    }
+
+    private async void OnTmrMatchtimeElapsed(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        //Match.TimeLeftSeconds = await ApiSrv.GetMatchTimeAsync(Match.Id);
+        var updatedData = await ApiSrv.GetMatchAsync(Match.Id);
+        Match.TimeLeftSeconds = updatedData.TimeLeftSeconds;
+
+        if (Match.ScoreTeam1 != updatedData.ScoreTeam1)
+            await ApiSrv.SetMatchGoalAsync(Match.Id, 0, Match.ScoreTeam1.Value - updatedData.ScoreTeam1.Value);
+
+        if (Match.ScoreTeam2 != updatedData.ScoreTeam2)
+            await ApiSrv.SetMatchGoalAsync(Match.Id, 1, Match.ScoreTeam2.Value - updatedData.ScoreTeam2.Value);
+
+
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    private async void StartGame()
+    {
+        await ApiSrv.ControlMatchtimeAsync(Match.Id, "start");
+    }
+
+    private async void StopGame()
+    {
+        await ApiSrv.ControlMatchtimeAsync(Match.Id, "stop");
+    }
+
+    private async void GoalTeam1()
+    {
+        await ApiSrv.SetMatchGoalAsync(Match.Id, 0,1);
+        Match.ScoreTeam1++;
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    private async void GoalTeam2()
+    {
+        await ApiSrv.SetMatchGoalAsync(Match.Id, 1,1);
+        Match.ScoreTeam2++;
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    private async void UngoalTeam1()
+    {
+        await ApiSrv.SetMatchGoalAsync(Match.Id, 0,-1);
+        Match.ScoreTeam1--;
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    private async void UngoalTeam2()
+    {
+        await ApiSrv.SetMatchGoalAsync(Match.Id, 1,-1);
+        Match.ScoreTeam2--;
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+}
