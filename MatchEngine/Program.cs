@@ -33,6 +33,7 @@ namespace MatchEngine
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls(new string[] { "http://*:5000", "https://*:5001" });                    
                 });
     }
 }

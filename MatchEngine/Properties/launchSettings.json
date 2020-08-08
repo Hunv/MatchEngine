@@ -18,7 +18,6 @@
     },
     "MatchEngine": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "api/tournament",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
