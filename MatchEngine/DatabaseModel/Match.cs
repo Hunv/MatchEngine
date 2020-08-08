@@ -9,6 +9,12 @@ namespace MatchEngine.DatabaseModel
 {
     public class Match
     {
+        public Match() { }
+        public Match(DtoMatch dtoMatch)
+        {
+            FromDto(dtoMatch);
+        }
+
         /// <summary>
         /// The ID of the match
         /// </summary>
@@ -46,6 +52,12 @@ namespace MatchEngine.DatabaseModel
         public int TimeLeftSeconds { get; set; }
 
         /// <summary>
+        /// The tournament this match belongs to
+        /// </summary>
+        public Tournament Tournament { get; set; }
+
+
+        /// <summary>
         /// Converts the object to a DTO object
         /// </summary>
         /// <returns></returns>
@@ -62,6 +74,10 @@ namespace MatchEngine.DatabaseModel
             };
         }
 
+        /// <summary>
+        /// Converts the object from a DTO object
+        /// </summary>
+        /// <param name="dto"></param>
         public void FromDto(DtoMatch dto)
         {
             Id = dto.Id;

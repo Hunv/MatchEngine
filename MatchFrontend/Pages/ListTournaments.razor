@@ -1,0 +1,50 @@
+﻿
+@page "/tournament"
+@using MatchFrontend.Data
+@using System.Net.Http
+@using System.Web
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+
+@if (TournamentList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Datum</th>
+                <th>Stadt</th>
+                <th>Spielstätte</th>
+                <th>Organisator</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tournament in TournamentList)
+            {
+                <tr>
+                    <td>@tournament.Name</td>
+                    <td>@tournament.Date</td>
+                    <td>@tournament.City</td>
+                    <td>@tournament.Location</td>
+                    <td>@tournament.Organisator</td>
+                    <td><a href="/tournament/@tournament.Id">Verwalten</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<DtoTournament> TournamentList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        TournamentList = await ApiSrv.GetTournamentListAsync();
+    }
+}

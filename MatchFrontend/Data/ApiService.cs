@@ -23,6 +23,8 @@ namespace MatchFrontend.Data
             Console.WriteLine("Using Serverbase URL " + _ServerBaseUrl);
         }
 
+        #region Match
+
         /// <summary>
         /// Gets a Match
         /// </summary>
@@ -152,17 +154,96 @@ namespace MatchFrontend.Data
             }
         }
 
+        #endregion
+
+
+        #region Tournament
+        /// <summary>
+        /// Add a new Tournament
+        /// </summary>
+        /// <param name="tournament"></param>
+        public async Task AddTournamentAsync(DtoTournament tournament)
+        {
+            var json = JsonConvert.SerializeObject(tournament, Helper.GetJsonSerializer());
+
+            HttpClient client = new HttpClient();
+            var requestMessage = GetRequestMessage("POST", "tournament", json);
+            requestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = await client.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+            }
+        }
+        
+        /// <summary>
+        /// Gets all Tournaments
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<DtoTournament>> GetTournamentListAsync()
+        {
+            var tournamentList = new List<DtoTournament>();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "tournament"))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                tournamentList = JsonConvert.DeserializeObject<List<DtoTournament>>(json, Helper.GetJsonSerializer());
+            }
+
+            return tournamentList;
+        }
+
+        /// <summary>
+        /// Gets a Tournament
+        /// </summary>
+        /// <param name="tournamentId"></param>
+        /// <returns></returns>
+        public async Task<DtoTournament> GetTournamentAsync(int tournamentId)
+        {
+            var tournament = new DtoTournament();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "tournament/" + tournamentId))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                tournament = JsonConvert.DeserializeObject<DtoTournament>(json, Helper.GetJsonSerializer());
+            }
+
+            return tournament;
+        }
+
+        /// <summary>
+        /// Add a new Tournament
+        /// </summary>
+        /// <param name="tournament"></param>
+        public async Task SetTournamentAsync(DtoTournament tournament)
+        {
+            var json = JsonConvert.SerializeObject(tournament, Helper.GetJsonSerializer());
+
+            HttpClient client = new HttpClient();
+            var requestMessage = GetRequestMessage("PUT", "tournament/" + tournament.Id, json);
+            requestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = await client.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+            }
+        }
+        #endregion
 
 
 
 
-
-
-
-
-
-
-
+        #region Helper
 
         private HttpRequestMessage GetRequestMessage(string method, string uri, string json)
         {
@@ -173,5 +254,6 @@ namespace MatchFrontend.Data
                 Content = new StringContent(json)
             };
         }
+        #endregion
     }
 }

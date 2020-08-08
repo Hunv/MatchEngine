@@ -1,0 +1,67 @@
+﻿
+@page "/tournament/{id}"
+@using MatchFrontend.Data
+@using System.Net.Http
+@using System.Web
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+
+@if (Tournament == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<EditForm Model="@Tournament" OnValidSubmit="@SaveTournament">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <a>Name</a>
+    <InputText id="txtName" type="text" class="form-control" @bind-Value="Tournament.Name" />
+    <ValidationMessage For="@(() => Tournament.Name)" />
+    <br />
+
+    <a>Datum</a>
+    <InputDate id="txtDate" type="date" class="form-control" @bind-Value="Tournament.Date" />
+    <ValidationMessage For="@(() => Tournament.Date)" />
+    <br />
+
+    <a>Stadt</a>
+    <InputText id="txtCity" type="text" class="form-control" @bind-Value="Tournament.City" />
+    <ValidationMessage For="@(() => Tournament.City)" />
+    <br />
+
+    <a>Spielstätte</a>
+    <InputText id="txtLocation" type="text" class="form-control" @bind-Value="Tournament.Location" />
+    <ValidationMessage For="@(() => Tournament.Location)" />
+    <br />
+
+    <a>Organisator</a>
+    <InputText id="txtOrganisator" type="text" class="form-control" @bind-Value="Tournament.Organisator" />
+    <ValidationMessage For="@(() => Tournament.Organisator)" />
+    <br />
+
+    <button class="btn btn-primary" type="submit">Speichern</button>
+</EditForm>
+}
+
+@code {
+    private DtoTournament Tournament;
+
+    [Parameter]
+    public string Id { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Tournament = await ApiSrv.GetTournamentAsync(Convert.ToInt32(Id));
+    }
+
+    private async void SaveTournament()
+    {
+        await ApiSrv.SetTournamentAsync(Tournament);
+        NavigationManager.NavigateTo("/tournament");
+    }
+
+}

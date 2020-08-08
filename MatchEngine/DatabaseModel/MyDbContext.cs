@@ -11,20 +11,7 @@ namespace MatchEngine.DatabaseModel
     public class MyDbContext : DbContext
     {
         public DbSet<Match> Matches { get; set; }
-        //public DbSet<StandaloneMatch> StandaloneMatch { get; set; }
-        //public DbSet<StandaloneTeam> StandaloneTeams { get; set; }
-
-        //public DbSet<Club> Clubs { get; set; }
-        //public DbSet<MatchConfiguration> MatchConfigurations { get; set; }
-        //public DbSet<MatchGoal> MatchGoals { get; set; }
-        //public DbSet<MatchHalftime> MatchHalftimes { get; set; }
-        //public DbSet<MatchInfo> MatchInfos { get; set; }
-        //public DbSet<MatchPlayer> MatchPlayers { get; set; }
-        //public DbSet<MatchTeam> MatchTeams { get; set; }
-        //public DbSet<Player> Players { get; set; }
-        //public DbSet<Tournament> Tournaments { get; set; }
-        //public DbSet<TournamentPlayer> TournamentPlayers { get; set; }
-        //public DbSet<TournamentTeam> TournamentTeams { get; set; }
+        public DbSet<Tournament> Tournaments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,7 +23,16 @@ namespace MatchEngine.DatabaseModel
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //// Map table names
+            // Map table names
+            modelBuilder.Entity<Tournament>().ToTable("Tournaments");
+            modelBuilder.Entity<Tournament>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasMany(m => m.MatchList)
+                    .WithOne(p => p.Tournament);
+            });
+
+
             //modelBuilder.Entity<Club>().ToTable("Clubs");
             //modelBuilder.Entity<Club>(entity =>
             //{
@@ -77,14 +73,6 @@ namespace MatchEngine.DatabaseModel
             //modelBuilder.Entity<MatchTeam>(entity =>
             //{
             //    entity.HasKey(e => e.Id);
-            //});
-
-            //modelBuilder.Entity<Tournament>().ToTable("Tournaments");
-            //modelBuilder.Entity<Tournament>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //    entity.HasMany(m => m.TeamList)
-            //        .WithOne(p => p.Tournament);
             //});
 
 
@@ -128,7 +116,7 @@ namespace MatchEngine.DatabaseModel
             //    entity.HasKey(e => e.Id);
             //    entity.HasMany(e => e.Teams)
             //        .WithOne(p => p.StandaloneMatch);
-                
+
             //});
 
 
