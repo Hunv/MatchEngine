@@ -1,0 +1,132 @@
+﻿
+@page "/dashboard"
+@page "/dashboard/{id:int}"
+@using MatchFrontend.Data
+@using System.Net.Http
+@using System.Web
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+
+
+
+@if (LiveMatchList == null)
+{
+    <p><em>Lade...</em></p>
+}
+else if (LiveMatchList.Count == 0)
+{
+    <p><em>Derzeit kein laufendes Spiel</em></p>
+}
+else if (LiveMatchList.Count > 1 && !Id.HasValue)
+{
+    <p>Aktuell laufende Spiele:</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Team1</th>
+                <th>Team2</th>
+                <th>Restzeit</th>
+                <th>Punkte Team1</th>
+                <th>Punkte Team2</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var aMatch in LiveMatchList)
+            {
+                <tr>
+                    <td>@aMatch.NameTeam1</td>
+                    <td>@aMatch.NameTeam2</td>
+                    <td>@SecondsToTime(aMatch.TimeLeftSeconds.Value)</td>
+                    <td>@aMatch.ScoreTeam1</td>
+                    <td>@aMatch.ScoreTeam2</td>
+                    <td><a href="dashboard/@aMatch.Id">Anzeigen</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1 class="text-center text-responsive">@LiveMatchList.Single(x => x.Id == Id.Value).NameTeam1 vs. @LiveMatchList.Single(x => x.Id == Id.Value).NameTeam2</h1>
+    <h1 class="text-center text-responsiveXL">@LiveMatchList.Single(x => x.Id == Id.Value).ScoreTeam1 : @LiveMatchList.Single(x => x.Id == Id.Value).ScoreTeam2</h1>
+    <br />
+    <br />
+    <h1 class="text-center">Restzeit:</h1>
+    <h1 class="text-center text-responsive">@SecondsToTime(LiveMatchList.Single(x => x.Id == Id.Value).TimeLeftSeconds.Value)</h1>
+}
+
+@code {
+    private List<DtoMatch> LiveMatchList = null;
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    private System.Timers.Timer tmrMatchtime = new System.Timers.Timer(1000);
+
+    protected override async Task OnInitializedAsync()
+    {
+        LiveMatchList = await ApiSrv.GetLiveMatchListAsync();
+
+        if (!Id.HasValue && LiveMatchList.Count == 1)
+            Id = LiveMatchList[0].Id;
+
+        tmrMatchtime.Elapsed += OnTmrMatchtimeElapsed;
+        tmrMatchtime.Start();
+    }
+
+    private string SecondsToTime(int seconds)
+    {
+        return ((seconds / 60).ToString("D2") + ":" + (seconds % 60).ToString("D2"));
+    }
+
+
+    private async void OnTmrMatchtimeElapsed(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        if (Id.HasValue)
+        {
+            var updatedData = await ApiSrv.GetMatchAsync(Id.Value);
+            LiveMatchList.Single(x => x.Id == Id.Value).ScoreTeam1 = updatedData.ScoreTeam1;
+            LiveMatchList.Single(x => x.Id == Id.Value).ScoreTeam2 = updatedData.ScoreTeam2;
+
+            //To count the seconds more smoothly, only correct the seconds, if the diff is more than 1 second
+            if (LiveMatchList.Single(x => x.Id == Id.Value).TimeLeftSeconds - updatedData.TimeLeftSeconds > 1 ||
+                LiveMatchList.Single(x => x.Id == Id.Value).TimeLeftSeconds - updatedData.TimeLeftSeconds < 1)
+            {
+                LiveMatchList.Single(x => x.Id == Id.Value).TimeLeftSeconds = updatedData.TimeLeftSeconds;
+            }
+            else
+            {
+                LiveMatchList.Single(x => x.Id == Id.Value).TimeLeftSeconds--;
+            }
+
+
+        }
+        else
+        {
+            var updatedData = await ApiSrv.GetLiveMatchListAsync();
+            foreach(var ud in updatedData)
+            {
+                LiveMatchList.Single(x => x.Id == ud.Id).ScoreTeam1 = ud.ScoreTeam1;
+                LiveMatchList.Single(x => x.Id == ud.Id).ScoreTeam2 = ud.ScoreTeam2;
+
+
+                //To count the seconds more smoothly, only correct the seconds, if the diff is more than 1 second
+                if (LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds - ud.TimeLeftSeconds > 1 ||
+                    LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds - ud.TimeLeftSeconds < 1)
+                {
+                    LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds = ud.TimeLeftSeconds;
+                }
+                else
+                {
+                    LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds--;
+                }
+            }
+        }
+
+        await InvokeAsync(() => { StateHasChanged(); });
+
+    }
+}

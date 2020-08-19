@@ -1,0 +1,7 @@
+﻿.text-responsive {
+    font-size: calc(300% + 1vw + 1vh);
+}
+
+.text-responsiveXL {
+    font-size: calc(1000% + 1vw + 1vh);
+}

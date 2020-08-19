@@ -26,6 +26,23 @@ namespace MatchEngine.Api
             }
         }
 
+
+        public static string GetLiveMatchList()
+        {
+            using (var dbContext = new MyDbContext())
+            {
+                var ongoingMatchIds = MatchCore.OngoingMatches.Select(x => x.MatchId);
+                var dto = new List<DtoMatch>();
+                    
+
+                foreach (var aMatch in dbContext.Matches.Include("Tournament").Where(x => ongoingMatchIds.Contains(x.Id)))
+                    dto.Add(aMatch.ToDto());
+
+                var json = JsonConvert.SerializeObject(dto, Helper.GetJsonSerializer());
+                return json;
+            }
+        }
+
         public static string GetMatch(int id)
         {
             using (var dbContext = new MyDbContext())

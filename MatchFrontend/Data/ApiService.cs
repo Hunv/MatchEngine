@@ -91,6 +91,27 @@ namespace MatchFrontend.Data
         }
 
         /// <summary>
+        /// Gets all running Matches
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<DtoMatch>> GetLiveMatchListAsync()
+        {
+            var matchList = new List<DtoMatch>();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "match/live"))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                matchList = JsonConvert.DeserializeObject<List<DtoMatch>>(json, Helper.GetJsonSerializer());
+            }
+
+            return matchList;
+        }
+
+        /// <summary>
         /// Gets all Matches
         /// </summary>
         /// <returns></returns>
