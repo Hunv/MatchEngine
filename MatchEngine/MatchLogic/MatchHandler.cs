@@ -39,12 +39,14 @@ namespace MatchEngine.MatchLogic
                 //Decrease SecondsLeft
                 using (var dbContext = new MyDbContext())
                 {
-                    dbContext.Matches.Single(x => x.Id == MatchId).TimeLeftSeconds -= diff;                    
-                    dbContext.SaveChanges();
-
                     if (dbContext.Matches.Single(x => x.Id == MatchId).TimeLeftSeconds <= 0)
                     {
                         Stop();
+                    }
+                    else
+                    {
+                        dbContext.Matches.Single(x => x.Id == MatchId).TimeLeftSeconds -= diff;
+                        dbContext.SaveChanges();
                     }
                 }
             }

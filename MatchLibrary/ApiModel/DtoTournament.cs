@@ -39,6 +39,7 @@ namespace MatchLibrary.ApiModel
         /// <summary>
         /// Matches that belong to this tournament
         /// </summary>
-        public List<DtoMatch> MatchList { get; set; }
+        //public List<DtoMatch> MatchList { get; set; }
+        public int[] MatchIdList { get; set; }
     }
 }

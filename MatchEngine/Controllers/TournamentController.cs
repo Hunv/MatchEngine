@@ -39,6 +39,22 @@ namespace MatchEngine.Controllers
 
 
         /// <summary>
+        /// Gets all Matches of a Tournament
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}/matchlist")]
+        public IActionResult GetTournamentMatches(int id)
+        {
+            _logger.LogDebug("{0}: Get Tournament Matches {1}", Request.HttpContext.Connection.RemoteIpAddress, id);
+
+            var json = Api.ApiTournament.GetTournamentMatches(id);
+            var result = new OkObjectResult(json);
+
+            _logger.LogDebug("{0}: Got Tournament Matches ID {1} JSON {2}", Request.HttpContext.Connection.RemoteIpAddress, id, json);
+            return result;
+        }
+
+        /// <summary>
         /// Gets all Tournamentes
         /// </summary>
         /// <returns></returns>

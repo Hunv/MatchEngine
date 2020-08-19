@@ -1,6 +1,7 @@
 ﻿using MatchLibrary.ApiModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,19 +9,28 @@ namespace MatchEngine.DatabaseModel
 {
     public class Tournament
     {
+        public Tournament() { }
+        public Tournament(DtoTournament dto)
+        {
+            FromDto(dto);
+        }
+
         /// <summary>
         /// Internal Id for a tournament
         /// </summary>
+        [Key]
         public int Id { get; set; }
 
         /// <summary>
         /// The Name of the Tournament
         /// </summary>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// The Date of the tournament
         /// </summary>
+        [Required]
         public DateTime Date { get; set; }
 
         /// <summary>
@@ -50,18 +60,13 @@ namespace MatchEngine.DatabaseModel
         /// <returns></returns>
         public DtoTournament ToDto()
         {
-            var matches = new List<DtoMatch>();
-            if (MatchList != null)
-                foreach (var aMatch in MatchList)
-                    matches.Add(aMatch.ToDto());
-
             return new DtoTournament()
             {
                 Id = Id,
                 City = City,
                 Date = Date,
                 Location = Location,
-                MatchList = matches,
+                MatchIdList = MatchList == null ? null : MatchList.Select(x => x.Id).ToArray(),
                 Name = Name,
                 Organisator = Organisator
             };
@@ -80,9 +85,14 @@ namespace MatchEngine.DatabaseModel
             Name = dto.Name;
             Organisator = dto.Organisator;
 
-            MatchList.Clear();
-            foreach (var aMatch in dto.MatchList)
-                MatchList.Add(new Match(aMatch));
+            if (MatchList != null)
+                MatchList.Clear();
+
+            if (MatchList == null)
+                MatchList = new List<Match>();
+
+            foreach (var aMatch in dto.MatchIdList)
+                MatchList.Add(new Match() { Id = aMatch });
         }
     }
 }

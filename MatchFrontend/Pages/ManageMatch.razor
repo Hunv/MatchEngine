@@ -13,9 +13,6 @@
 }
 else
 {
-<EditForm Model="@Match" OnValidSubmit="@SaveMatch">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
 
     <div class="text-center">
         <table class="table">
@@ -48,34 +45,47 @@ else
     <br />
 
     <button class="btn btn-primary" @onclick="StartGame">Spiel starten</button>
-    &nbsp;&nbsp;
+    <a>&nbsp; &nbsp;</a>
     <button class="btn btn-primary" @onclick="StopGame">Spiel unterbrechen</button>
     <br />
     <br />
     <br />
 
-    <a>Team1</a>
-    <input id="txtNameTeam1" class="form-control" type="text" @bind="@Match.NameTeam1" />
-    <br />
 
-    <a>Team2</a>
-    <input id="txtNameTeam2" class="form-control" type="text" @bind="@Match.NameTeam2" />
-    <br />
+    <EditForm Model="@Match" OnValidSubmit="@SaveMatch">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="panel border">
+            @*<h4>Spiel Details ändern</h4>*@
+            <button class="btn btn-primary" @onclick="e => this.EditCollapsed = !this.EditCollapsed">
+                @( this.EditCollapsed ? "Zeige Spieldetails" : "Verstecke Details")
+            </button>
+            <div class="panel border @(EditCollapsed?"collapse":"")">
+                <a>Team1</a>
+                <input id="txtNameTeam1" class="form-control" type="text" @bind="@Match.NameTeam1" />
+                <br />
 
-    <a>Restzeit in Sekunden</a>
-    <input id="txtLenght" class="form-control" type="text" @bind="Match.TimeLeftSeconds" />
-    <br />
+                <a>Team2</a>
+                <input id="txtNameTeam2" class="form-control" type="text" @bind="@Match.NameTeam2" />
+                <br />
 
-    <a>Punkte Team1</a>
-    <input id="txtScoreTeam1" class="form-control" type="text" @bind="@Match.ScoreTeam1" />
-    <br />
+                <a>Restzeit in Sekunden</a>
+                <input id="txtLenght" class="form-control" type="text" @bind="Match.TimeLeftSeconds" />
+                <br />
 
-    <a>Punkte Team2</a>
-    <input id="txtScoreTeam2" class="form-control" type="text" @bind="@Match.ScoreTeam2" />
-    <br />
+                <a>Punkte Team1</a>
+                <input id="txtScoreTeam1" class="form-control" type="text" @bind="@Match.ScoreTeam1" />
+                <br />
 
-    <button class="btn btn-primary" type="submit">Speichern</button>
-</EditForm>
+                <a>Punkte Team2</a>
+                <input id="txtScoreTeam2" class="form-control" type="text" @bind="@Match.ScoreTeam2" />
+                <br />
+
+                <button class="btn btn-primary" type="submit">Speichern</button>
+
+            </div>
+        </div>
+    </EditForm>
 }
 
 @code {
@@ -83,6 +93,7 @@ else
 
     [Parameter]
     public string Id { get; set; }
+    private bool EditCollapsed = true;
 
     private int TimeLeftMinutes { get { return Match.TimeLeftSeconds.Value / 60; } }
     private int TimeLeftSeconds { get { return Match.TimeLeftSeconds.Value % 60; } }
@@ -128,28 +139,28 @@ else
 
     private async void GoalTeam1()
     {
-        await ApiSrv.SetMatchGoalAsync(Match.Id, 0,1);
+        await ApiSrv.SetMatchGoalAsync(Match.Id, 0, 1);
         Match.ScoreTeam1++;
         await InvokeAsync(() => { StateHasChanged(); });
     }
 
     private async void GoalTeam2()
     {
-        await ApiSrv.SetMatchGoalAsync(Match.Id, 1,1);
+        await ApiSrv.SetMatchGoalAsync(Match.Id, 1, 1);
         Match.ScoreTeam2++;
         await InvokeAsync(() => { StateHasChanged(); });
     }
 
     private async void UngoalTeam1()
     {
-        await ApiSrv.SetMatchGoalAsync(Match.Id, 0,-1);
+        await ApiSrv.SetMatchGoalAsync(Match.Id, 0, -1);
         Match.ScoreTeam1--;
         await InvokeAsync(() => { StateHasChanged(); });
     }
 
     private async void UngoalTeam2()
     {
-        await ApiSrv.SetMatchGoalAsync(Match.Id, 1,-1);
+        await ApiSrv.SetMatchGoalAsync(Match.Id, 1, -1);
         Match.ScoreTeam2--;
         await InvokeAsync(() => { StateHasChanged(); });
     }

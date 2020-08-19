@@ -26,6 +26,7 @@ else
                 <th>Restzeit</th>
                 <th>Punkte Team1</th>
                 <th>Punkte Team2</th>
+                <th>Turnier</th>
                 <th></th>
             </tr>
         </thead>
@@ -38,6 +39,7 @@ else
                 <td>@match.TimeLeftSeconds</td>
                 <td>@match.ScoreTeam1</td>
                 <td>@match.ScoreTeam2</td>
+                <td>@(match.TournamentId.HasValue ? TournamentList.SingleOrDefault(x => x.Id == match.TournamentId.Value).Name : "")</td>
                 <td><a href="/match/@match.Id">Verwalten</a></td>
             </tr>
             }
@@ -47,9 +49,11 @@ else
 
 @code {
     private List<DtoMatch> MatchList = null;
+    private List<DtoTournament> TournamentList = null;
 
     protected override async Task OnInitializedAsync()
     {
         MatchList = await ApiSrv.GetMatchListAsync();
+        TournamentList = await ApiSrv.GetTournamentListAsync();
     }
 }

@@ -90,6 +90,27 @@ namespace MatchFrontend.Data
             return matchList;
         }
 
+        /// <summary>
+        /// Gets all Matches
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<DtoMatch>> GetMatchListAsync(int tournamentId)
+        {
+            var matchList = new List<DtoMatch>();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "tournament/" + tournamentId + "/matchlist"))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                matchList = JsonConvert.DeserializeObject<List<DtoMatch>>(json, Helper.GetJsonSerializer());
+            }
+
+            return matchList;
+        }
+
 
         /// <summary>
         /// Add a new Tournament

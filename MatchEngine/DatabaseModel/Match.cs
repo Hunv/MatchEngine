@@ -63,7 +63,7 @@ namespace MatchEngine.DatabaseModel
         /// <returns></returns>
         public DtoMatch ToDto()
         {
-            return new DtoMatch()
+            var dto = new DtoMatch()
             {
                 Id = Id,
                 ScoreTeam1 = ScoreTeam1,
@@ -72,6 +72,11 @@ namespace MatchEngine.DatabaseModel
                 NameTeam2 = NameTeam2,
                 TimeLeftSeconds = TimeLeftSeconds
             };
+
+            if (Tournament != null)
+                dto.TournamentId = Tournament.Id;
+
+            return dto;
         }
 
         /// <summary>
@@ -86,6 +91,7 @@ namespace MatchEngine.DatabaseModel
             NameTeam1 = dto.NameTeam1;
             NameTeam2 = dto.NameTeam2;
             TimeLeftSeconds = dto.TimeLeftSeconds ?? 0;
+            Tournament = dto.TournamentId.HasValue ? new Tournament() { Id = dto.TournamentId.Value }  : null;
         }
 
     }

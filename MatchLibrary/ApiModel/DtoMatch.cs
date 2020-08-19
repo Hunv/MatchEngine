@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace MatchLibrary.ApiModel
@@ -24,16 +25,29 @@ namespace MatchLibrary.ApiModel
         /// <summary>
         /// Name of Team1
         /// </summary>
+        [MaxLength(256, ErrorMessage = "Der Name kann höchstens aus 256 Zeichen bestehen.")]
+        [MinLength(2, ErrorMessage = "Der Name muss mindestens aus zwei Zeichen bestehen.")]
+        [RegularExpression(@"^[a-zA-Z0-9\s-äüößÄÜÖ]*$", ErrorMessage = "Der Name kann nur aus Buchstaben, Zahlen, Bindestrichen und Leerzeichen bestehen")]
         public string NameTeam1 { get; set; }
-        
+
         /// <summary>
         /// Name of Team2
         /// </summary>
+        [MaxLength(256, ErrorMessage = "Der Name kann höchstens aus 256 Zeichen bestehen.")]
+        [MinLength(2, ErrorMessage = "Der Name muss mindestens aus zwei Zeichen bestehen.")]
+        [RegularExpression(@"^[a-zA-Z0-9\s-äüößÄÜÖ]*$", ErrorMessage = "Der Name kann nur aus Buchstaben, Zahlen, Bindestrichen und Leerzeichen bestehen")]
         public string NameTeam2 { get; set; }
 
         /// <summary>
         /// Time left
         /// </summary>
+        [Range(0,int.MaxValue,ErrorMessage ="Die Zeit muss größer als 0 Sekunden sein.")]
         public int? TimeLeftSeconds { get; set; }
+
+        /// <summary>
+        /// Tournament this match belongs to
+        /// </summary>
+        //public DtoTournament Tournament { get; set; }
+        public int? TournamentId { get; set; }
     }
 }

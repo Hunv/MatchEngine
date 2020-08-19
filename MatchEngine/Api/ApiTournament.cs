@@ -35,6 +35,18 @@ namespace MatchEngine.Api
             }
         }
 
+        public static string GetTournamentMatches(int id)
+        {
+            using (var dbContext = new MyDbContext())
+            {
+                var dto = dbContext.Tournaments.SingleOrDefault(x => x.Id == id);
+                if (dto == null)
+                    return "";
+
+                return JsonConvert.SerializeObject(dto.MatchList, Helper.GetJsonSerializer());
+            }
+        }
+                
         public async static Task SetTournament(DtoTournament tournament)
         {
             using (var dbContext = new MyDbContext())
@@ -57,14 +69,9 @@ namespace MatchEngine.Api
                     if (tournament.Organisator != null)
                         tmt.Organisator = tournament.Organisator;
 
-                    if (tournament.MatchList != null)
+                    if (tournament.MatchIdList != null)
                     {
-                        var matchList = new List<Match>();
-                        if (tournament.MatchList != null)
-                            foreach (var aMatch in tournament.MatchList)
-                                matchList.Add(new Match(aMatch));
-                        
-                        tmt.MatchList = matchList;
+                        tmt.MatchList = dbContext.Matches.Where(x => tournament.MatchIdList.Contains(x.Id)).ToList();
                     }
 
                     await dbContext.SaveChangesAsync();
@@ -78,9 +85,10 @@ namespace MatchEngine.Api
             using (var dbContext = new MyDbContext())
             {
                 var matchlist = new List<Match>();
-                if (tournament.MatchList != null)
-                    foreach (var aMatch in tournament.MatchList)
-                        matchlist.Add(new Match(aMatch));
+                if (tournament.MatchIdList != null)
+                {
+                    matchlist = dbContext.Matches.Where(x => tournament.MatchIdList.Contains(x.Id)).ToList();
+                }
 
                 var newTournament = new Tournament()
                 {

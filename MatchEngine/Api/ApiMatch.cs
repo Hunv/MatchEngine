@@ -2,6 +2,7 @@
 using MatchEngine.MatchLogic;
 using MatchLibrary;
 using MatchLibrary.ApiModel;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace MatchEngine.Api
             using(var dbContext = new MyDbContext())
             {
                 var dto = new List<DtoMatch>();
-                foreach(var aMatch in dbContext.Matches)
+                foreach(var aMatch in dbContext.Matches.Include("Tournament"))
                     dto.Add(aMatch.ToDto());
 
                 var json = JsonConvert.SerializeObject(dto, Helper.GetJsonSerializer());
@@ -76,6 +77,10 @@ namespace MatchEngine.Api
                     NameTeam2 = match.NameTeam2,
                     TimeLeftSeconds = match.TimeLeftSeconds ?? 0
                 };
+                if (match.TournamentId != 0)
+                {                    
+                    newMatch.Tournament = dbContext.Tournaments.SingleOrDefault(x => x.Id == match.TournamentId);
+                }
 
                 dbContext.Matches.Add(newMatch);
 
