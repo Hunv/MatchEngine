@@ -32,8 +32,7 @@ namespace MatchEngine.Api
             using (var dbContext = new MyDbContext())
             {
                 var ongoingMatchIds = MatchCore.OngoingMatches.Select(x => x.MatchId);
-                var dto = new List<DtoMatch>();
-                    
+                var dto = new List<DtoMatch>();                    
 
                 foreach (var aMatch in dbContext.Matches.Include("Tournament").Where(x => ongoingMatchIds.Contains(x.Id)))
                     dto.Add(aMatch.ToDto());
@@ -137,7 +136,7 @@ namespace MatchEngine.Api
             //If match not already exist, create a new one
             if (!MatchCore.OngoingMatches.Any(x => x.MatchId == id))
             {
-                MatchCore.OngoingMatches.Add(new MatchHandler(id));
+                MatchCore.AddOngoingMatch(new MatchHandler(id));
             }
             
             //Start the Match
