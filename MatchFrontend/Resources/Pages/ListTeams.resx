@@ -117,28 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddMatch" xml:space="preserve">
-    <value>New Match</value>
+  <data name="Club" xml:space="preserve">
+    <value>Club</value>
   </data>
-  <data name="AddTeam" xml:space="preserve">
-    <value>New Team</value>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading...</value>
   </data>
-  <data name="AddTournament" xml:space="preserve">
-    <value>New Tournament</value>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage...</value>
   </data>
-  <data name="CurrentMatches" xml:space="preserve">
-    <value>Live Matches</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="Matchlist" xml:space="preserve">
-    <value>Match list</value>
+  <data name="Shortcut" xml:space="preserve">
+    <value>Shortcut</value>
   </data>
-  <data name="Teamlist" xml:space="preserve">
-    <value>Team list</value>
+  <data name="Shortname" xml:space="preserve">
+    <value>Shortname</value>
   </data>
-  <data name="Title" xml:space="preserve">
-    <value>MatchFrontend</value>
-  </data>
-  <data name="Tournamentlist" xml:space="preserve">
-    <value>Tournament list</value>
+  <data name="Teamcaptain" xml:space="preserve">
+    <value>Teamcaptain</value>
   </data>
 </root>

@@ -12,11 +12,7 @@ namespace MatchFrontend.Data
 {
     public class ApiService
     {
-//#if DEBUG
-//        private static readonly string _ServerBaseUrl = "https://localhost:44302/api/";
-//#else
         private static readonly string _ServerBaseUrl = "https://localhost:5001/api/";
-//#endif
         
         public ApiService()
         {
@@ -281,6 +277,88 @@ namespace MatchFrontend.Data
             }
         }
         #endregion
+
+
+        /// <summary>
+        /// Get all Teams
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<DtoTeam>> GetTeamListAsync()
+        {
+            var teamList = new List<DtoTeam>();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "team"))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                teamList = JsonConvert.DeserializeObject<List<DtoTeam>>(json, Helper.GetJsonSerializer());
+            }
+
+            return teamList;
+        }
+
+        /// <summary>
+        /// Gets a Team
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DtoTeam> GetTeamAsync(int id)
+        {
+            var team = new DtoTeam();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "team/" + id))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                team = JsonConvert.DeserializeObject<DtoTeam>(json, Helper.GetJsonSerializer());
+            }
+
+            return team;
+        }
+
+        /// <summary>
+        /// Add a new Team
+        /// </summary>
+        /// <param name="team"></param>
+        public async Task AddTeamAsync(DtoTeam team)
+        {
+            var json = JsonConvert.SerializeObject(team, Helper.GetJsonSerializer());
+
+            HttpClient client = new HttpClient();
+            var requestMessage = GetRequestMessage("POST", "team", json);
+            requestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = await client.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+            }
+        }
+
+
+        /// <summary>
+        /// Edit a Team
+        /// </summary>
+        /// <param name="team"></param>
+        public async Task SetTeamAsync(DtoTeam team)
+        {
+            var json = JsonConvert.SerializeObject(team, Helper.GetJsonSerializer());
+
+            HttpClient client = new HttpClient();
+            var requestMessage = GetRequestMessage("PUT", "team/" + team.Id, json);
+            requestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = await client.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+            }
+        }
 
 
 
