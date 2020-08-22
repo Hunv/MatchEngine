@@ -6,21 +6,22 @@
 @using MatchLibrary.ApiModel
 @inject NavigationManager NavigationManager
 @inject ApiService ApiSrv
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ListTournaments> Localizer
 
 @if (TournamentList == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@Localizer["Loading"]</em></p>
 }
 else
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Datum</th>
-                <th>Stadt</th>
-                <th>Spielstätte</th>
-                <th>Organisator</th>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Date"]</th>
+                <th>@Localizer["City"]</th>
+                <th>@Localizer["Location"]</th>
+                <th>@Localizer["Organizer"]</th>
                 <th></th>
             </tr>
         </thead>
@@ -29,11 +30,11 @@ else
             {
                 <tr>
                     <td>@tournament.Name</td>
-                    <td>@tournament.Date</td>
+                    <td>@tournament.Date.Value.ToString("dd.MM.yyyy")</td>
                     <td>@tournament.City</td>
                     <td>@tournament.Location</td>
                     <td>@tournament.Organisator</td>
-                    <td><a href="/tournament/@tournament.Id">Verwalten</a></td>
+                    <td><a href="/tournament/@tournament.Id">@(Localizer["Manage"])</a></td>
                 </tr>
             }
         </tbody>

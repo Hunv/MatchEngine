@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MatchFrontend.Data;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 
 namespace MatchFrontend
 {
@@ -26,7 +29,32 @@ namespace MatchFrontend
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
+
+            //services.Configure<RequestLocalizationOptions>(
+            //    options =>
+            //    {
+            //        List<CultureInfo> supportedCultures =
+            //            new List<CultureInfo>
+            //            {
+            //                new CultureInfo("de-DE"),
+            //                new CultureInfo("en-US")
+            //            };
+
+            //        options.DefaultRequestCulture = new RequestCulture("en-US");
+
+            //        // Formatting numbers, dates, etc.
+            //        options.SupportedCultures = supportedCultures;
+
+            //        // UI string 
+            //        options.SupportedUICultures = supportedCultures;
+
+            //    });
+
             services.AddRazorPages();
+#if DEBUG
+            services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+#endif
             services.AddServerSideBlazor();
             services.AddSingleton<ApiService>();
         }
@@ -34,6 +62,8 @@ namespace MatchFrontend
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseRequestLocalization(app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>().Value);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

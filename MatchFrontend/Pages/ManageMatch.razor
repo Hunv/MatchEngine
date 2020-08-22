@@ -6,10 +6,11 @@
 @using MatchLibrary.ApiModel
 @inject NavigationManager NavigationManager
 @inject ApiService ApiSrv
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ManageMatch> Localizer
 
 @if (Match == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@Localizer["Loading"]</em></p>
 }
 else
 {
@@ -27,26 +28,26 @@ else
                 <td><h1>@Match.ScoreTeam2</h1></td>
             </tr>
             <tr>
-                <td><button class="btn btn-primary" @onclick="GoalTeam1">Tor Team1</button></td>
+                <td><button class="btn btn-primary" @onclick="GoalTeam1">@Localizer["ScoreTeam1"]</button></td>
                 <td>&nbsp;&nbsp;&nbsp;</td>
-                <td><button class="btn btn-primary" @onclick="GoalTeam2">Tor Team2</button></td>
+                <td><button class="btn btn-primary" @onclick="GoalTeam2">@Localizer["ScoreTeam2"]</button></td>
             </tr>
             <tr>
-                <td><button class="btn btn-primary" @onclick="UngoalTeam1">Korrektur</button></td>
+                <td><button class="btn btn-primary" @onclick="UngoalTeam1">@Localizer["Undo"]</button></td>
                 <td>&nbsp;&nbsp;&nbsp;</td>
-                <td><button class="btn btn-primary" @onclick="UngoalTeam2">Korrektur</button></td>
+                <td><button class="btn btn-primary" @onclick="UngoalTeam2">@Localizer["Undo"]</button></td>
             </tr>
         </table>
     </div>
     <br />
-    <h1 class="text-center">Spielzeit:</h1>
+    <h1 class="text-center">@Localizer["Timeleft"]:</h1>
     <h1 class="text-center">@TimeLeftMinutes.ToString("D2"):@TimeLeftSeconds.ToString("D2")</h1>
     <br />
     <br />
 
-    <button class="btn btn-primary" @onclick="StartGame">Spiel starten</button>
+    <button class="btn btn-primary" @onclick="StartGame">@Localizer["StartMatch"]</button>
     <a>&nbsp; &nbsp;</a>
-    <button class="btn btn-primary" @onclick="StopGame">Spiel unterbrechen</button>
+    <button class="btn btn-primary" @onclick="StopGame">@Localizer["PauseMatch"]</button>
     <br />
     <br />
     <br />
@@ -58,30 +59,30 @@ else
         <div class="panel border">
             @*<h4>Spiel Details ändern</h4>*@
             <button class="btn btn-primary" @onclick="e => this.EditCollapsed = !this.EditCollapsed">
-                @( this.EditCollapsed ? "Zeige Spieldetails" : "Verstecke Details")
+                @( this.EditCollapsed ? Localizer["ShowMatchDetails"] : Localizer["HideMatchDetails"])
             </button>
             <div class="panel border @(EditCollapsed?"collapse":"")">
-                <a>Team1</a>
+                <a>@Localizer["Team1"]</a>
                 <input id="txtNameTeam1" class="form-control" type="text" @bind="@Match.NameTeam1" />
                 <br />
 
-                <a>Team2</a>
+                <a>@Localizer["Team2"]</a>
                 <input id="txtNameTeam2" class="form-control" type="text" @bind="@Match.NameTeam2" />
                 <br />
 
-                <a>Restzeit in Sekunden</a>
+                <a>@Localizer["TimeleftSeconds"]</a>
                 <input id="txtLenght" class="form-control" type="text" @bind="Match.TimeLeftSeconds" />
                 <br />
 
-                <a>Punkte Team1</a>
+                <a>@Localizer["ScoresTeam1"]</a>
                 <input id="txtScoreTeam1" class="form-control" type="text" @bind="@Match.ScoreTeam1" />
                 <br />
 
-                <a>Punkte Team2</a>
+                <a>@Localizer["ScoresTeam2"]</a>
                 <input id="txtScoreTeam2" class="form-control" type="text" @bind="@Match.ScoreTeam2" />
                 <br />
 
-                <button class="btn btn-primary" type="submit">Speichern</button>
+                <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
 
             </div>
         </div>

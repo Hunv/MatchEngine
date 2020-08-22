@@ -6,24 +6,25 @@
 @using MatchLibrary.ApiModel
 @inject NavigationManager NavigationManager
 @inject ApiService ApiSrv
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ManageTournament> Localizer
 
 @if (Tournament == null || Matches == null)
 {
-    <p><em>Lade...</em></p>
+    <p><em>@Localizer["Loading"]</em></p>
 }
 else
 {
-    <h1>Matchliste</h1>
-    <a href="/addmatch">Match erstellen</a>
+    <h1>@Localizer["MatchList"]</h1>
+    <a href="/addmatch">@Localizer["MatchCreate"]</a>
     <br />
     <table class="table">
         <thead>
             <tr>
-                <th>Team1</th>
-                <th>Team2</th>
-                <th>Restzeit</th>
-                <th>Punkte Team1</th>
-                <th>Punkte Team2</th>
+                <th>@Localizer["Team1"]</th>
+                <th>@Localizer["Team2"]</th>
+                <th>@Localizer["Timeleft"]</th>
+                <th>@Localizer["ScoresTeam1"]</th>
+                <th>@Localizer["ScoresTeam2"]</th>
                 <th></th>
             </tr>
         </thead>
@@ -32,13 +33,13 @@ else
             {
                 @foreach (var match in Matches)
                 {
-                    <tr>                        
+                    <tr>
                         <td>@match.NameTeam1</td>
                         <td>@match.NameTeam2</td>
                         <td>@match.TimeLeftSeconds</td>
                         <td>@match.ScoreTeam1</td>
                         <td>@match.ScoreTeam2</td>
-                        <td><a href="/match/@match.Id">Verwalten</a></td>
+                        <td><a href="/match/@match.Id">@Localizer["Manage"]</a></td>
                     </tr>
                 }
             }
@@ -48,39 +49,39 @@ else
     <div class="panel border">
         @*<h3>Turnier Details ändern</h3>*@
         <button class="btn btn-primary" @onclick="e => this.EditCollapsed = !this.EditCollapsed">
-            @( this.EditCollapsed ? "Zeige Turnierdetails" : "Verstecke Details")
+            @( this.EditCollapsed ? Localizer["ShowDetails"] : Localizer["HideDetails"])
         </button>
         <div class="panel border @(EditCollapsed?"collapse":"")">
             <EditForm Model="@Tournament" OnValidSubmit="@SaveTournament">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
 
-                <a>Name</a>
+                <a>@Localizer["Name"]</a>
                 <InputText id="txtName" type="text" class="form-control" @bind-Value="Tournament.Name" />
                 <ValidationMessage For="@(() => Tournament.Name)" />
                 <br />
 
-                <a>Datum</a>
+                <a>@Localizer["Date"]</a>
                 <InputDate id="txtDate" type="date" class="form-control" @bind-Value="Tournament.Date" />
                 <ValidationMessage For="@(() => Tournament.Date)" />
                 <br />
 
-                <a>Stadt</a>
+                <a>@Localizer["City"]</a>
                 <InputText id="txtCity" type="text" class="form-control" @bind-Value="Tournament.City" />
                 <ValidationMessage For="@(() => Tournament.City)" />
                 <br />
 
-                <a>Spielstätte</a>
+                <a>@Localizer["Location"]</a>
                 <InputText id="txtLocation" type="text" class="form-control" @bind-Value="Tournament.Location" />
                 <ValidationMessage For="@(() => Tournament.Location)" />
                 <br />
 
-                <a>Organisator</a>
+                <a>@Localizer["Organizer"]</a>
                 <InputText id="txtOrganisator" type="text" class="form-control" @bind-Value="Tournament.Organisator" />
                 <ValidationMessage For="@(() => Tournament.Organisator)" />
                 <br />
 
-                <button class="btn btn-primary" type="submit">Speichern</button>
+                <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
             </EditForm>
         </div>
     </div>

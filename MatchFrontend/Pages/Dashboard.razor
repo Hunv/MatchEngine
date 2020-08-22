@@ -7,29 +7,28 @@
 @using MatchLibrary.ApiModel
 @inject NavigationManager NavigationManager
 @inject ApiService ApiSrv
-
-
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Dashboard> Localizer
 
 @if (LiveMatchList == null)
 {
-    <p><em>Lade...</em></p>
+    <p><em>@Localizer["Loading"]</em></p>
 }
 else if (LiveMatchList.Count == 0)
 {
-    <p><em>Derzeit kein laufendes Spiel</em></p>
+    <p><em>@Localizer["NoMatches"]</em></p>
 }
 else if (LiveMatchList.Count > 1 && !Id.HasValue)
 {
-    <p>Aktuell laufende Spiele:</p>
+    <p>@Localizer["CurrentMatches"]:</p>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Team1</th>
-                <th>Team2</th>
-                <th>Restzeit</th>
-                <th>Punkte Team1</th>
-                <th>Punkte Team2</th>
+                <th>@Localizer["Team1"]</th>
+                <th>@Localizer["Team2"]</th>
+                <th>@Localizer["Timeleft"]</th>
+                <th>@Localizer["Team1Score"]</th>
+                <th>@Localizer["Team2Score"]</th>
                 <th></th>
             </tr>
         </thead>
@@ -42,7 +41,7 @@ else if (LiveMatchList.Count > 1 && !Id.HasValue)
                     <td>@SecondsToTime(aMatch.TimeLeftSeconds.Value)</td>
                     <td>@aMatch.ScoreTeam1</td>
                     <td>@aMatch.ScoreTeam2</td>
-                    <td><a href="dashboard/@aMatch.Id">Anzeigen</a></td>
+                    <td><a href="dashboard/@aMatch.Id">@Localizer["Show"]</a></td>
                 </tr>
             }
         </tbody>
@@ -54,7 +53,7 @@ else
     <h1 class="text-center text-responsiveXL">@LiveMatchList.Single(x => x.Id == Id.Value).ScoreTeam1 : @LiveMatchList.Single(x => x.Id == Id.Value).ScoreTeam2</h1>
     <br />
     <br />
-    <h1 class="text-center">Restzeit:</h1>
+    <h1 class="text-center">@Localizer["Timeleft"]:</h1>
     <h1 class="text-center text-responsive">@SecondsToTime(LiveMatchList.Single(x => x.Id == Id.Value).TimeLeftSeconds.Value)</h1>
 }
 
@@ -105,7 +104,7 @@ else
         else
         {
             var updatedData = await ApiSrv.GetLiveMatchListAsync();
-            foreach(var ud in updatedData)
+            foreach (var ud in updatedData)
             {
                 LiveMatchList.Single(x => x.Id == ud.Id).ScoreTeam1 = ud.ScoreTeam1;
                 LiveMatchList.Single(x => x.Id == ud.Id).ScoreTeam2 = ud.ScoreTeam2;
