@@ -12,4 +12,8 @@
     <ProjectReference Include="..\MatchLibrary\MatchLibrary.csproj" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="cd ..\MatchEngine &amp;&amp; powershell start-process dotnet run" />
+  </Target>
+
 </Project>
