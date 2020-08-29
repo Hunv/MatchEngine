@@ -117,34 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddMatch" xml:space="preserve">
-    <value>Spiel hinzufügen</value>
+  <data name="ClubCreate" xml:space="preserve">
+    <value>Verein erstellen...</value>
   </data>
-  <data name="AddTeam" xml:space="preserve">
-    <value>Mannschaft hinzufügen</value>
+  <data name="Clubnumber" xml:space="preserve">
+    <value>Vereinsnummer</value>
   </data>
-  <data name="AddTournament" xml:space="preserve">
-    <value>Turnier hinzufügen</value>
+  <data name="Contact" xml:space="preserve">
+    <value>Kontakt</value>
   </data>
-  <data name="AddClub" xml:space="preserve">
-    <value>Verein hinzufügen</value>
+  <data name="Loading" xml:space="preserve">
+    <value>Lade...</value>
   </data>
-  <data name="CurrentMatches" xml:space="preserve">
-    <value>Live Matches</value>
+  <data name="Name" xml:space="preserve">
+    <value>Offizieller Vereinsname</value>
   </data>
-  <data name="Matchlist" xml:space="preserve">
-    <value>Matchliste</value>
+  <data name="Notes" xml:space="preserve">
+    <value>Bemerkungen</value>
   </data>
-  <data name="Teamlist" xml:space="preserve">
-    <value>Mannschaftsliste</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>MatchFrontend</value>
-  </data>
-  <data name="Tournamentlist" xml:space="preserve">
-    <value>Turnierliste</value>
-  </data>
-  <data name="Clublist" xml:space="preserve">
-    <value>Vereinsliste</value>
+  <data name="Save" xml:space="preserve">
+    <value>Speichern...</value>
   </data>
 </root>

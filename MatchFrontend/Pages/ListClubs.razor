@@ -1,0 +1,49 @@
+﻿
+@page "/club"
+@using MatchFrontend.Data
+@using System.Net.Http
+@using System.Web
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ListTournaments> Localizer
+
+@if (ClubList == null)
+{
+    <p><em>@Localizer["Loading"]</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Localizer["OfficialName"]</th>
+                <th>@Localizer["Clubnumber"]</th>
+                <th>@Localizer["Contact"]</th>
+                <th>@Localizer["Notes"]</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var club in ClubList)
+            {
+                <tr>
+                    <td>@club.OfficalName</td>
+                    <td>@club.Clubnumber</td>
+                    <td>@club.Contact</td>
+                    <td>@club.Notes</td>
+                    <td><a href="/club/@club.Id">@(Localizer["Manage"])</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<DtoClub> ClubList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ClubList = await ApiSrv.GetClubListAsync();
+    }
+}

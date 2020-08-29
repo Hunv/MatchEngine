@@ -361,6 +361,89 @@ namespace MatchFrontend.Data
         }
 
 
+        /// <summary>
+        /// Add a new Club
+        /// </summary>
+        /// <param name="club"></param>
+        public async Task AddClubAsync(DtoClub club)
+        {
+            var json = JsonConvert.SerializeObject(club, Helper.GetJsonSerializer());
+
+            HttpClient client = new HttpClient();
+            var requestMessage = GetRequestMessage("POST", "club", json);
+            requestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = await client.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+            }
+        }
+
+        /// <summary>
+        /// Get all Clubs
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<DtoClub>> GetClubListAsync()
+        {
+            var clubList = new List<DtoClub>();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "club"))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                clubList = JsonConvert.DeserializeObject<List<DtoClub>>(json, Helper.GetJsonSerializer());
+            }
+
+            return clubList;
+        }
+
+
+        /// <summary>
+        /// Gets a Club
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DtoClub> GetClubAsync(int id)
+        {
+            var club = new DtoClub();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "club/" + id))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                club = JsonConvert.DeserializeObject<DtoClub>(json, Helper.GetJsonSerializer());
+            }
+
+            return club;
+        }
+
+        /// <summary>
+        /// Edit a Club
+        /// </summary>
+        /// <param name="club"></param>
+        public async Task SetClubAsync(DtoClub club)
+        {
+            var json = JsonConvert.SerializeObject(club, Helper.GetJsonSerializer());
+
+            HttpClient client = new HttpClient();
+            var requestMessage = GetRequestMessage("PUT", "club/" + club.Id, json);
+            requestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = await client.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+            }
+        }
+
+
+
 
 
         #region Helper

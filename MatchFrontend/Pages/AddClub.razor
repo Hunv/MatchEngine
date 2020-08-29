@@ -1,0 +1,61 @@
+﻿
+@page "/addclub"
+@using MatchFrontend.Data
+@using System.Net.Http
+@using System.Web
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+@inject Microsoft.Extensions.Localization.IStringLocalizer<AddTournament> Localizer
+
+
+<h1>@Localizer["ClubCreate"]</h1>
+
+@if (1 == 2)@*(teamList == null || refereeList == null)*@
+{
+    <p><em>@Localizer["Loading"]</em></p>
+}
+else
+{
+<EditForm Model="@newClub" OnValidSubmit="@SaveClub">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <a>@Localizer["Name"]</a>
+    <InputText id="txtClubName" type="text" class="form-control" @bind-Value="newClub.OfficalName" />
+    <ValidationMessage For="@(() => newClub.OfficalName)" />
+    <br />
+
+    <a>@Localizer["Clubnumber"]</a>
+    <InputText id="txtClubnumber" type="text" class="form-control" @bind-Value="newClub.Clubnumber" />
+    <ValidationMessage For="@(() => newClub.Clubnumber)" />
+    <br />
+
+    <a>@Localizer["Contact"]</a>
+    <InputTextArea id="txtClubcontact" type="text" class="form-control" @bind-Value="newClub.Contact" />
+    <ValidationMessage For="@(() => newClub.Contact)" />
+    <br />
+
+    <a>@Localizer["Notes"]</a>
+    <InputTextArea id="txtClubNotes" type="text" class="form-control" @bind-Value="newClub.Notes" />
+    <ValidationMessage For="@(() => newClub.Notes)" />
+    <br />
+
+    <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
+</EditForm>
+}
+
+@code {
+    private DtoClub newClub = new DtoClub();
+
+    //protected override async Task OnInitializedAsync()
+    //{
+
+    //}
+
+    private async void SaveClub()
+    {
+        await ApiSrv.AddClubAsync(newClub);
+        NavigationManager.NavigateTo("/club");
+    }
+}
