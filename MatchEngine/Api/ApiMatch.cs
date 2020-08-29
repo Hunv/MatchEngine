@@ -76,6 +76,12 @@ namespace MatchEngine.Api
                     if (match.TimeLeftSeconds.HasValue)
                         dto.TimeLeftSeconds = match.TimeLeftSeconds.Value;
 
+                    if (match.TournamentId.HasValue)
+                        dto.Tournament = dbContext.Tournaments.SingleOrDefault(x => x.Id == match.TournamentId);
+
+                    if (match.TeamIdList != null)
+                        dto.TeamList = dbContext.Teams2Matches.Where(x => match.TeamIdList.Contains(x.TeamId)).ToList();
+                    
                     await dbContext.SaveChangesAsync();
                 }
             }

@@ -63,6 +63,11 @@ namespace MatchEngine.DatabaseModel
         public int MatchStatus { get; set; }
 
         /// <summary>
+        /// List of Teams, that participate at this match
+        /// </summary>
+        public List<Team2Match> TeamList { get; set; }
+
+        /// <summary>
         /// Converts the object to a DTO object
         /// </summary>
         /// <returns></returns>

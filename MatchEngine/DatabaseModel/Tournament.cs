@@ -53,6 +53,10 @@ namespace MatchEngine.DatabaseModel
         /// </summary>
         public List<Match> MatchList { get; set; }
 
+        /// <summary>
+        /// List of teams, that participates at this tournament
+        /// </summary>
+        public List<Team2Tournament> TeamList { get; set; }
 
         /// <summary>
         /// Converts the object to a DTO object
