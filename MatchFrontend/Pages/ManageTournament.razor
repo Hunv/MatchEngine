@@ -56,27 +56,27 @@ else
                 <ValidationSummary />
 
                 <a>Name</a>
-                <InputText id="txtName" type="text" class="form-control" @bind-Value="Tournament.Name" />
+                <InputText id="txtTournamentName" type="text" class="form-control" @bind-Value="Tournament.Name" />
                 <ValidationMessage For="@(() => Tournament.Name)" />
                 <br />
 
                 <a>Datum</a>
-                <InputDate id="txtDate" type="date" class="form-control" @bind-Value="Tournament.Date" />
+                <InputDate id="txtTournamentDate" type="date" class="form-control" @bind-Value="Tournament.Date" />
                 <ValidationMessage For="@(() => Tournament.Date)" />
                 <br />
 
                 <a>Stadt</a>
-                <InputText id="txtCity" type="text" class="form-control" @bind-Value="Tournament.City" />
+                <InputText id="txtTournamentCity" type="text" class="form-control" @bind-Value="Tournament.City" />
                 <ValidationMessage For="@(() => Tournament.City)" />
                 <br />
 
                 <a>Spielstätte</a>
-                <InputText id="txtLocation" type="text" class="form-control" @bind-Value="Tournament.Location" />
+                <InputText id="txtTournamentLocation" type="text" class="form-control" @bind-Value="Tournament.Location" />
                 <ValidationMessage For="@(() => Tournament.Location)" />
                 <br />
 
                 <a>Organisator</a>
-                <InputText id="txtOrganisator" type="text" class="form-control" @bind-Value="Tournament.Organisator" />
+                <InputText id="txtTournamentOrganisator" type="text" class="form-control" @bind-Value="Tournament.Organisator" />
                 <ValidationMessage For="@(() => Tournament.Organisator)" />
                 <br />
 
