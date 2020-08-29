@@ -1,4 +1,5 @@
 ﻿using MatchLibrary.ApiModel;
+using MatchLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -56,6 +57,15 @@ namespace MatchEngine.DatabaseModel
         /// </summary>
         public Tournament Tournament { get; set; }
 
+        /// <summary>
+        /// The Status of the Match
+        /// </summary>
+        public int MatchStatus { get; set; }
+
+        /// <summary>
+        /// List of Teams, that participate at this match
+        /// </summary>
+        public List<Team2Match> TeamList { get; set; }
 
         /// <summary>
         /// Converts the object to a DTO object
@@ -70,7 +80,8 @@ namespace MatchEngine.DatabaseModel
                 ScoreTeam2 = ScoreTeam2,
                 NameTeam1 = NameTeam1,
                 NameTeam2 = NameTeam2,
-                TimeLeftSeconds = TimeLeftSeconds
+                TimeLeftSeconds = TimeLeftSeconds,
+                MatchStatus = MatchStatus
             };
 
             if (Tournament != null)
@@ -92,6 +103,7 @@ namespace MatchEngine.DatabaseModel
             NameTeam2 = dto.NameTeam2;
             TimeLeftSeconds = dto.TimeLeftSeconds ?? 0;
             Tournament = dto.TournamentId.HasValue ? new Tournament() { Id = dto.TournamentId.Value }  : null;
+            MatchStatus = dto.MatchStatus;
         }
 
     }

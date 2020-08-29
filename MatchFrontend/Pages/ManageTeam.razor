@@ -1,0 +1,86 @@
+﻿@page "/team/{id:int}"
+@using MatchFrontend.Data
+@using System.Net.Http
+@using System.Web
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ManageTournament> Localizer
+
+@if (Team == null)
+{
+    <p><em>@Localizer["Loading"]</em></p>
+}
+else
+{
+    <h1>@Localizer["TeamList"]</h1>
+    <a href="/addteam">@Localizer["TeamCreate"]</a>
+    <br />
+    
+    <EditForm Model="@Team" OnValidSubmit="@SaveTeam">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <a>@Localizer["Name"]</a>
+        <InputText id="txtTeamName" type="text" class="form-control" @bind-Value="Team.Name" />
+        <ValidationMessage For="@(() => Team.Name)" />
+        <br />
+
+        <a>@Localizer["Shortname"]</a>
+        <InputText id="txtTeamShortname" type="text" class="form-control" @bind-Value="Team.Shortname" />
+        <ValidationMessage For="@(() => Team.Shortname)" />
+        <br />
+
+        <a>@Localizer["Shortcut"]</a>
+        <InputText id="txtTeamShortcut" type="text" class="form-control" @bind-Value="Team.Shortcut" />
+        <ValidationMessage For="@(() => Team.Shortcut)" />
+        <br />
+
+        <a>@Localizer["Teamcaptain"]</a>
+        <InputText id="txtTeamTeamcaptain" type="text" class="form-control" @bind-Value="Team.Teamcaptain" />
+        <ValidationMessage For="@(() => Team.Teamcaptain)" />
+        <br />
+
+        <a>@Localizer["ViceTeamcaptain"]</a>
+        <InputText id="txtTeamViceTeamcaptain" type="text" class="form-control" @bind-Value="Team.ViceTeamcaptain" />
+        <ValidationMessage For="@(() => Team.ViceTeamcaptain)" />
+        <br />
+
+        <a>@Localizer["Coach"]</a>
+        <InputText id="txtTeamCoach" type="text" class="form-control" @bind-Value="Team.Coach" />
+        <ValidationMessage For="@(() => Team.Coach)" />
+        <br />
+
+        <a>@Localizer["Club"]</a>
+        <InputText id="txtTeamClub" type="text" class="form-control" @bind-Value="Team.Club" />
+        <ValidationMessage For="@(() => Team.Club)" />
+        <br />
+
+        <a>@Localizer["Notes"]</a>
+        <InputText id="txtTeamNotes" type="text" class="form-control" @bind-Value="Team.Notes" />
+        <ValidationMessage For="@(() => Team.Notes)" />
+        <br />
+
+        <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
+    </EditForm>
+}
+
+@code {
+    private DtoTeam Team;
+
+    [Parameter]
+    public int Id { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Team = await ApiSrv.GetTeamAsync(Id);
+    }
+
+    private async void SaveTeam()
+    {
+        await ApiSrv.SetTeamAsync(Team);
+        NavigationManager.NavigateTo("/team");
+    }
+
+}

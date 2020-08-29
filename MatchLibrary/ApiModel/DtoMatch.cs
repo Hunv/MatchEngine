@@ -27,7 +27,7 @@ namespace MatchLibrary.ApiModel
         /// </summary>
         [MaxLength(256, ErrorMessage = "Der Name kann höchstens aus 256 Zeichen bestehen.")]
         [MinLength(2, ErrorMessage = "Der Name muss mindestens aus zwei Zeichen bestehen.")]
-        [RegularExpression(@"^[a-zA-Z0-9\s-äüößÄÜÖ]*$", ErrorMessage = "Der Name kann nur aus Buchstaben, Zahlen, Bindestrichen und Leerzeichen bestehen")]
+        [RegularExpression(@"^[a-zA-Z0-9\s-äüößÄÜÖ\.]*$", ErrorMessage = "Der Name kann nur aus Buchstaben, Zahlen, Bindestrichen, Punkten und Leerzeichen bestehen")]
         public string NameTeam1 { get; set; }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace MatchLibrary.ApiModel
         /// </summary>
         [MaxLength(256, ErrorMessage = "Der Name kann höchstens aus 256 Zeichen bestehen.")]
         [MinLength(2, ErrorMessage = "Der Name muss mindestens aus zwei Zeichen bestehen.")]
-        [RegularExpression(@"^[a-zA-Z0-9\s-äüößÄÜÖ]*$", ErrorMessage = "Der Name kann nur aus Buchstaben, Zahlen, Bindestrichen und Leerzeichen bestehen")]
+        [RegularExpression(@"^[a-zA-Z0-9\s-äüößÄÜÖ\.]*$", ErrorMessage = "Der Name kann nur aus Buchstaben, Zahlen, Bindestrichen, Punkten und Leerzeichen bestehen")]
         public string NameTeam2 { get; set; }
 
         /// <summary>
@@ -49,5 +49,15 @@ namespace MatchLibrary.ApiModel
         /// </summary>
         //public DtoTournament Tournament { get; set; }
         public int? TournamentId { get; set; }
+
+        /// <summary>
+        /// Only for Livematches: The current status of the Match (see EnumMatchStatus for ID resolution)
+        /// </summary>
+        public int MatchStatus { get; set; }
+
+        /// <summary>
+        /// List of Team Ids that participate at this match
+        /// </summary>
+        public List<int> TeamIdList { get; set; }
     }
 }

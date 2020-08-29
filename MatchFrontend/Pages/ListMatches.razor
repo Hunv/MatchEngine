@@ -1,47 +1,55 @@
-﻿
-@page "/match"
+﻿@page "/match"
 @using MatchFrontend.Data
 @using System.Net.Http
 @using System.Web
 @using MatchLibrary.ApiModel
 @inject NavigationManager NavigationManager
 @inject ApiService ApiSrv
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ListMatches> Localizer
 
+<h1>@Localizer["MatchList"]</h1>
 
-<h1>Matchliste</h1>
-
-<a href="/addmatch">Match erstellen</a>
+<a href="/addmatch">@Localizer["MatchCreate"]</a>
 
 @if (MatchList == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@Localizer["Loading"]</em></p>
 }
 else
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Team1</th>
-                <th>Team2</th>
-                <th>Restzeit</th>
-                <th>Punkte Team1</th>
-                <th>Punkte Team2</th>
-                <th>Turnier</th>
+                <th>@Localizer["Team1"]</th>
+                <th>@Localizer["Team2"]</th>
+                <th>@Localizer["TimeLeft"]</th>
+                <th>@Localizer["ScoreTeam1"]</th>
+                <th>@Localizer["ScoreTeam2"]</th>
+                <th>@Localizer["Tournament"]</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var match in MatchList)
             {
-            <tr>
-                <td>@match.NameTeam1</td>
-                <td>@match.NameTeam2</td>
-                <td>@match.TimeLeftSeconds</td>
-                <td>@match.ScoreTeam1</td>
-                <td>@match.ScoreTeam2</td>
-                <td>@(match.TournamentId.HasValue ? TournamentList.SingleOrDefault(x => x.Id == match.TournamentId.Value).Name : "")</td>
-                <td><a href="/match/@match.Id">Verwalten</a></td>
-            </tr>
+                <tr>
+                    <td>@match.NameTeam1</td>
+                    <td>@match.NameTeam2</td>
+                    <td>
+                        @if (@match.TimeLeftSeconds.Value == 0)
+                        {
+                            @match.MatchStatus.ToString();
+                        }
+                        else
+                        {
+                            SecondsToTime(@match.TimeLeftSeconds.Value);
+                        }
+                    </td>
+                    <td>@match.ScoreTeam1</td>
+                    <td>@match.ScoreTeam2</td>
+                    <td>@(match.TournamentId.HasValue ? TournamentList.SingleOrDefault(x => x.Id == match.TournamentId.Value).Name : "")</td>
+                    <td><a href="/match/@match.Id">@Localizer["MatchManage"]</a></td>
+                </tr>
             }
         </tbody>
     </table>
@@ -51,9 +59,15 @@ else
     private List<DtoMatch> MatchList = null;
     private List<DtoTournament> TournamentList = null;
 
+
     protected override async Task OnInitializedAsync()
     {
         MatchList = await ApiSrv.GetMatchListAsync();
         TournamentList = await ApiSrv.GetTournamentListAsync();
+    }
+
+    private string SecondsToTime(int seconds)
+    {
+        return ((seconds / 60).ToString("D2") + ":" + (seconds % 60).ToString("D2"));
     }
 }

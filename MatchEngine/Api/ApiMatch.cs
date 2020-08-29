@@ -26,6 +26,22 @@ namespace MatchEngine.Api
             }
         }
 
+
+        public static string GetLiveMatchList()
+        {
+            using (var dbContext = new MyDbContext())
+            {
+                var ongoingMatchIds = MatchCore.OngoingMatches.Select(x => x.MatchId);
+                var dto = new List<DtoMatch>();                    
+
+                foreach (var aMatch in dbContext.Matches.Include("Tournament").Where(x => ongoingMatchIds.Contains(x.Id)))
+                    dto.Add(aMatch.ToDto());
+
+                var json = JsonConvert.SerializeObject(dto, Helper.GetJsonSerializer());
+                return json;
+            }
+        }
+
         public static string GetMatch(int id)
         {
             using (var dbContext = new MyDbContext())
@@ -60,6 +76,12 @@ namespace MatchEngine.Api
                     if (match.TimeLeftSeconds.HasValue)
                         dto.TimeLeftSeconds = match.TimeLeftSeconds.Value;
 
+                    if (match.TournamentId.HasValue)
+                        dto.Tournament = dbContext.Tournaments.SingleOrDefault(x => x.Id == match.TournamentId);
+
+                    if (match.TeamIdList != null)
+                        dto.TeamList = dbContext.Teams2Matches.Where(x => match.TeamIdList.Contains(x.TeamId)).ToList();
+                    
                     await dbContext.SaveChangesAsync();
                 }
             }
@@ -120,7 +142,7 @@ namespace MatchEngine.Api
             //If match not already exist, create a new one
             if (!MatchCore.OngoingMatches.Any(x => x.MatchId == id))
             {
-                MatchCore.OngoingMatches.Add(new MatchHandler(id));
+                MatchCore.AddOngoingMatch(new MatchHandler(id));
             }
             
             //Start the Match

@@ -74,6 +74,12 @@ namespace MatchEngine.Api
                         tmt.MatchList = dbContext.Matches.Where(x => tournament.MatchIdList.Contains(x.Id)).ToList();
                     }
 
+                    if (tournament.TeamIdList != null)
+                    {
+                        tmt.TeamList = dbContext.Teams2Tournaments.Where(x => tournament.TeamIdList.Contains(x.TeamId)).ToList();
+                    }
+
+
                     await dbContext.SaveChangesAsync();
                 }
             }
@@ -90,6 +96,12 @@ namespace MatchEngine.Api
                     matchlist = dbContext.Matches.Where(x => tournament.MatchIdList.Contains(x.Id)).ToList();
                 }
 
+                var teamlist = new List<Team2Tournament>();
+                if (tournament.TeamIdList != null)
+                {
+                    teamlist = dbContext.Teams2Tournaments.Where(x => tournament.TeamIdList.Contains(x.TeamId)).ToList();
+                }
+
                 var newTournament = new Tournament()
                 {
                     City = tournament.City,
@@ -97,7 +109,8 @@ namespace MatchEngine.Api
                     Location = tournament.Location,
                     Name = tournament.Name,
                     Organisator = tournament.Organisator,
-                    MatchList = matchlist
+                    MatchList = matchlist,
+                    TeamList = teamlist
                 };
 
                 dbContext.Tournaments.Add(newTournament);

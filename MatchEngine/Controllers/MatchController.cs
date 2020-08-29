@@ -37,6 +37,22 @@ namespace MatchEngine.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Gets all Matches
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("live")]
+        public IActionResult GetLiveMatchList()
+        {
+            _logger.LogDebug("{0}: Get Livematchlist", Request.HttpContext.Connection.RemoteIpAddress);
+
+            var json = Api.ApiMatch.GetLiveMatchList();
+            var result = new OkObjectResult(json);
+
+            _logger.LogDebug("{0}: Got Livematchlist JSON {1}", Request.HttpContext.Connection.RemoteIpAddress, json);
+            return result;
+        }
+
 
         /// <summary>
         /// Gets all Matches

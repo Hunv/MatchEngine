@@ -41,5 +41,10 @@ namespace MatchLibrary.ApiModel
         /// </summary>
         //public List<DtoMatch> MatchList { get; set; }
         public int[] MatchIdList { get; set; }
+
+        /// <summary>
+        /// List of TeamIds that participate at this Tournament
+        /// </summary>
+        public List<int> TeamIdList { get; set; }
     }
 }

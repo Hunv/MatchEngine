@@ -1,5 +1,7 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">MatchFrontend</a>
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<NavMenu> Localizer
+
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">@Localizer["Title"]</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,28 +10,48 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+            <NavLink class="nav-link" href="dashboard" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> @Localizer["CurrentMatches"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="addmatch">
-                <span class="oi oi-plus" aria-hidden="true"></span> Spiel hinzufügen
+                <span class="oi oi-plus" aria-hidden="true"></span> @Localizer["AddMatch"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="addtournament">
-                <span class="oi oi-plus" aria-hidden="true"></span> Turnier hinzufügen
+                <span class="oi oi-plus" aria-hidden="true"></span> @Localizer["AddTournament"]
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="addteam">
+                <span class="oi oi-plus" aria-hidden="true"></span> @Localizer["AddTeam"]
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="addclub">
+                <span class="oi oi-plus" aria-hidden="true"></span> @Localizer["AddClub"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="match">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Spielübersicht
+                <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Matchlist"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="tournament">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Turnierübersicht
+                <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Tournamentlist"]
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="team">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Teamlist"]
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="club">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Clublist"]
             </NavLink>
         </li>
     </ul>

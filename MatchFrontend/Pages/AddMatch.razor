@@ -6,81 +6,82 @@
 @using MatchLibrary.ApiModel
 @inject NavigationManager NavigationManager
 @inject ApiService ApiSrv
+@inject Microsoft.Extensions.Localization.IStringLocalizer<AddMatch> Localizer
 
 
-<h1>Match erstellen</h1>
+<h1>@Localizer["MatchCreate"]</h1>
 
-@if (tournamentList == null)
-{
-    <p><em>Lade..</em></p>
-}
-else
-{
-<EditForm Model="@newMatch" OnValidSubmit="@SaveMatch">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <a>Team1</a>
-    <InputText id="txtTeam1" type="text" class="form-control" placeholder="Name Team 1" @bind-Value="@newMatch.NameTeam1" />
-    <ValidationMessage For="@(() => newMatch.NameTeam1)" />
-    <br />
-
-    <a>Team2</a>
-    <InputText id="txtTeam2" type="text" class="form-control" placeholder="Name Team 2" @bind-Value="@newMatch.NameTeam2" />
-    <ValidationMessage For="@(() => newMatch.NameTeam2)" />
-    <br />
-
-    @*<a>Halbzeitlänge in Sekunden</a>
-        <InputText id="txtLenght" type="text" class="form-control" @bind-Value="@newMatch.TimeLeftSeconds" />
-        <ValidationMessage For="@(() => newMatch.TimeLeftSeconds)" />
-        <br />*@
-
-    <a>Tournament</a>
-    @*<select id="cmbTournament" class="form-control" @bind="@newMatch.Tournament.Id" onchange="@TournamentChanged">*@
-<select id="cmbTournament" class="form-control" @onchange=@TournamentChanged>
-    <option selected value="0">Kein Turnier</option>
-
-    @foreach (var tournament in tournamentList)
+    @if (tournamentList == null)
     {
-        @if (tournament.Id == newMatch.TournamentId)
+        <p><em>@Localizer["Loading"]</em></p>
+    }
+    else
+    {
+        <EditForm Model="@newMatch" OnValidSubmit="@SaveMatch">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <a>@Localizer["Team1"]</a>
+            <InputText id="txtTeam1" type="text" class="form-control" placeholder="@Localizer["Team1Name"]" @bind-Value="@newMatch.NameTeam1" />
+            <ValidationMessage For="@(() => newMatch.NameTeam1)" />
+            <br />
+
+            <a>@Localizer["Team2"]</a>
+            <InputText id="txtTeam2" type="text" class="form-control" placeholder="@Localizer["Team2Name"]" @bind-Value="@newMatch.NameTeam2" />
+            <ValidationMessage For="@(() => newMatch.NameTeam2)" />
+            <br />
+
+            @*<a>Halbzeitlänge in Sekunden</a>
+                <InputText id="txtLenght" type="text" class="form-control" @bind-Value="@newMatch.TimeLeftSeconds" />
+                <ValidationMessage For="@(() => newMatch.TimeLeftSeconds)" />
+                <br />*@
+
+        <a>@Localizer["Tournament"]</a>
+            @*<select id="cmbTournament" class="form-control" @bind="@newMatch.Tournament.Id" onchange="@TournamentChanged">*@
+            <select id="cmbTournament" class="form-control" @onchange=@TournamentChanged>
+                <option selected value="0">@Localizer["NoTournament"]</option>
+
+                @foreach (var tournament in tournamentList)
+                {
+                    @if (tournament.Id == newMatch.TournamentId)
+                    {
+                        <option selected value="@tournament.Id">@tournament.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@tournament.Id">@tournament.Name</option>
+                    }
+                }
+            </select>
+            <br />
+
+            <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>
+        </EditForm>
+    }
+
+    @code {
+        private DtoMatch newMatch = new DtoMatch() { NameTeam1 = "", NameTeam2 = "" };
+        private DtoTournament[] tournamentList;
+
+        protected override async Task OnInitializedAsync()
         {
-            <option selected value="@tournament.Id">@tournament.Name</option>
+            //newMatch.Tournament = new DtoTournament();
+            //newMatch.NameTeam1 = "";
+            //newMatch.NameTeam2 = "";
+            tournamentList = (await ApiSrv.GetTournamentListAsync()).ToArray();
         }
-        else
+
+        private async void SaveMatch()
         {
-            <option value="@tournament.Id">@tournament.Name</option>
+            if (!newMatch.TournamentId.HasValue && newMatch.TournamentId == 0)
+                newMatch.TournamentId = null;
+            await ApiSrv.AddMatchAsync(newMatch);
+            NavigationManager.NavigateTo("/match");
+        }
+
+        void TournamentChanged(ChangeEventArgs e)
+        {
+            newMatch.TournamentId = Convert.ToInt32(e.Value);
+
         }
     }
-</select>
-    <br />
-
-    <button class="btn btn-primary" type="submit">Speichern</button>
-</EditForm>
-}
-
-@code {
-    private DtoMatch newMatch = new DtoMatch() { NameTeam1 = "", NameTeam2 = ""};
-    private DtoTournament[] tournamentList;
-
-    protected override async Task OnInitializedAsync()
-    {
-        //newMatch.Tournament = new DtoTournament();
-        //newMatch.NameTeam1 = "";
-        //newMatch.NameTeam2 = "";
-        tournamentList = (await ApiSrv.GetTournamentListAsync()).ToArray();
-    }
-
-    private async void SaveMatch()
-    {
-        if (!newMatch.TournamentId.HasValue && newMatch.TournamentId == 0)
-            newMatch.TournamentId = null;
-        await ApiSrv.AddMatchAsync(newMatch);
-        NavigationManager.NavigateTo("/match");
-    }
-
-    void TournamentChanged(ChangeEventArgs e)
-    {
-        newMatch.TournamentId = Convert.ToInt32(e.Value);
-
-    }
-}

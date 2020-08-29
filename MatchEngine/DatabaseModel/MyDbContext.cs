@@ -12,6 +12,12 @@ namespace MatchEngine.DatabaseModel
     {
         public DbSet<Match> Matches { get; set; }
         public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<Team2Match> Teams2Matches { get; set; }
+        public DbSet<Team2Tournament> Teams2Tournaments { get; set; }
+
+        public DbSet<Club> Clubs { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -24,6 +30,29 @@ namespace MatchEngine.DatabaseModel
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Map table names
+            // Teams to Tournaments
+            modelBuilder.Entity<Team2Tournament>().ToTable("Teams2Tournaments");
+            modelBuilder.Entity<Team2Tournament>(entity =>
+            {
+                entity.HasKey(e => new { e.TeamId, e.TournamentId });
+                entity.HasOne(e => e.Team)
+                    .WithMany(e => e.TournamentList);
+                entity.HasOne(e => e.Tournament)
+                    .WithMany(e => e.TeamList);
+            });
+
+            // Teams to Matches
+            modelBuilder.Entity<Team2Match>().ToTable("Teams2Matches");
+            modelBuilder.Entity<Team2Match>(entity =>
+            {
+                entity.HasKey(e => new { e.TeamId, e.MatchId });
+                entity.HasOne(e => e.Team)
+                    .WithMany(e => e.MatchList);
+                entity.HasOne(e => e.Match)
+                    .WithMany(e => e.TeamList);
+            });
+
+            // Tournaments
             modelBuilder.Entity<Tournament>().ToTable("Tournaments");
             modelBuilder.Entity<Tournament>(entity =>
             {
@@ -31,6 +60,7 @@ namespace MatchEngine.DatabaseModel
                 entity.HasMany(m => m.MatchList)
                     .WithOne(p => p.Tournament);
             });
+
 
 
             //modelBuilder.Entity<Club>().ToTable("Clubs");
