@@ -126,6 +126,9 @@
   <data name="AddTournament" xml:space="preserve">
     <value>New Tournament</value>
   </data>
+  <data name="AddClub" xml:space="preserve">
+    <value>New Club</value>
+  </data>
   <data name="CurrentMatches" xml:space="preserve">
     <value>Live Matches</value>
   </data>
@@ -140,5 +143,8 @@
   </data>
   <data name="Tournamentlist" xml:space="preserve">
     <value>Tournament list</value>
+  </data>
+  <data name="Clublist" xml:space="preserve">
+    <value>Club list</value>
   </data>
 </root>

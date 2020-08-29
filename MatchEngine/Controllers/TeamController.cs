@@ -14,9 +14,9 @@ namespace MatchEngine.Controllers
     [Route("api/[controller]")]
     public class TeamController : ControllerBase
     {
-        private readonly ILogger<TournamentController> _logger;
+        private readonly ILogger<TeamController> _logger;
 
-        public TeamController(ILogger<TournamentController> logger)
+        public TeamController(ILogger<TeamController> logger)
         {
             _logger = logger;
         }

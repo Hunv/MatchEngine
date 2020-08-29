@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 MatchEngine/MatchEngine.db-wal
 MatchEngine/MatchEngine.db-shm
+MatchEngine/MatchEngine.db
