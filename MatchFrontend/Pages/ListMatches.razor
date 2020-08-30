@@ -11,7 +11,7 @@
 
 <a href="/addmatch">@Localizer["MatchCreate"]</a>
 
-@if (MatchList == null)
+@if (MatchList == null || TeamList == null || TournamentList == null)
 {
     <p><em>@Localizer["Loading"]</em></p>
 }
@@ -33,8 +33,25 @@ else
             @foreach (var match in MatchList)
             {
                 <tr>
-                    <td>@match.NameTeam1</td>
-                    <td>@match.NameTeam2</td>
+                    <td>@if (!match.Team1Id.HasValue || match.Team1Id.Value == 0)
+                    {
+                        @match.NameTeam1;
+                    }
+                    else
+                    { 
+                        @TeamList.Single(x => x.Id == match.Team1Id).Name;
+                    }
+                    </td>
+                    <td>
+                        @if (!match.Team2Id.HasValue || match.Team2Id.Value == 0)
+                        {
+                            @match.NameTeam2;
+                        }
+                        else
+                        {
+                            @TeamList.Single(x => x.Id == match.Team2Id).Name;
+                        }
+                    </td>
                     <td>
                         @if (@match.TimeLeftSeconds.Value == 0)
                         {
@@ -58,12 +75,14 @@ else
 @code {
     private List<DtoMatch> MatchList = null;
     private List<DtoTournament> TournamentList = null;
+    private List<DtoTeam> TeamList = null;
 
 
     protected override async Task OnInitializedAsync()
     {
         MatchList = await ApiSrv.GetMatchListAsync();
         TournamentList = await ApiSrv.GetTournamentListAsync();
+        TeamList = await ApiSrv.GetTeamListAsync();
     }
 
     private string SecondsToTime(int seconds)

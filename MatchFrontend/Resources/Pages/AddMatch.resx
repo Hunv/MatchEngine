@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CustomTeam1" xml:space="preserve">
+    <value>Custom Name</value>
+  </data>
+  <data name="CustomTeam2" xml:space="preserve">
+    <value>Custom Name</value>
+  </data>
+  <data name="HalftimeLength" xml:space="preserve">
+    <value>Halftime Length (Hours:Minutes:Seconds)</value>
+  </data>
   <data name="Loading" xml:space="preserve">
     <value>Loading...</value>
   </data>

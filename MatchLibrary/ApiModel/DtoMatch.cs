@@ -23,6 +23,18 @@ namespace MatchLibrary.ApiModel
         public int? ScoreTeam2 { get; set; }
 
         /// <summary>
+        /// The Id of the first Team. 0 to use manual team and apply NameTeam1 value
+        /// </summary>
+        public int? Team1Id { get; set; }
+
+
+        /// <summary>
+        /// The Id of the second Team. 0 to use manual team and apply NameTeam2 value
+        /// </summary>
+        public int? Team2Id { get; set; }
+
+
+        /// <summary>
         /// Name of Team1
         /// </summary>
         [MaxLength(256, ErrorMessage = "Der Name kann höchstens aus 256 Zeichen bestehen.")]

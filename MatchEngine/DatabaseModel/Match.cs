@@ -23,6 +23,16 @@ namespace MatchEngine.DatabaseModel
         public int Id { get; set; }
 
         /// <summary>
+        /// The Id of team 1 if a created team is used
+        /// </summary>
+        public int Team1Id { get; set; }
+
+        /// <summary>
+        /// The Id of team 2 if a created team is used
+        /// </summary>
+        public int Team2Id { get; set; }
+
+        /// <summary>
         /// Scores of Team1
         /// </summary>
         [Required]
@@ -81,7 +91,9 @@ namespace MatchEngine.DatabaseModel
                 NameTeam1 = NameTeam1,
                 NameTeam2 = NameTeam2,
                 TimeLeftSeconds = TimeLeftSeconds,
-                MatchStatus = MatchStatus
+                MatchStatus = MatchStatus,
+                Team1Id = Team1Id,
+                Team2Id = Team2Id
             };
 
             if (Tournament != null)
@@ -104,6 +116,8 @@ namespace MatchEngine.DatabaseModel
             TimeLeftSeconds = dto.TimeLeftSeconds ?? 0;
             Tournament = dto.TournamentId.HasValue ? new Tournament() { Id = dto.TournamentId.Value }  : null;
             MatchStatus = dto.MatchStatus;
+            Team1Id = dto.Team1Id ?? 0;
+            Team2Id = dto.Team2Id ?? 0;
         }
 
     }

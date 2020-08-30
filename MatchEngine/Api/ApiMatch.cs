@@ -81,6 +81,12 @@ namespace MatchEngine.Api
 
                     if (match.TeamIdList != null)
                         dto.TeamList = dbContext.Teams2Matches.Where(x => match.TeamIdList.Contains(x.TeamId)).ToList();
+
+                    if (match.Team1Id != null)
+                        dto.Team1Id = match.Team1Id.Value;
+
+                    if (match.Team2Id != null)
+                        dto.Team2Id = match.Team2Id.Value;
                     
                     await dbContext.SaveChangesAsync();
                 }
@@ -97,7 +103,9 @@ namespace MatchEngine.Api
                     ScoreTeam2 = match.ScoreTeam2 ?? 0,
                     NameTeam1 = match.NameTeam1,
                     NameTeam2 = match.NameTeam2,
-                    TimeLeftSeconds = match.TimeLeftSeconds ?? 0
+                    TimeLeftSeconds = match.TimeLeftSeconds ?? 0,
+                    Team1Id = match.Team1Id ?? 0,
+                    Team2Id = match.Team2Id ?? 0
                 };
                 if (match.TournamentId != 0)
                 {                    

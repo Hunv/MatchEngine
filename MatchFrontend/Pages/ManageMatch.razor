@@ -8,7 +8,7 @@
 @inject ApiService ApiSrv
 @inject Microsoft.Extensions.Localization.IStringLocalizer<ManageMatch> Localizer
 
-@if (Match == null)
+@if (Match == null || TeamList == null)
 {
     <p><em>@Localizer["Loading"]</em></p>
 }
@@ -63,11 +63,47 @@ else
             </button>
             <div class="panel border @(EditCollapsed?"collapse":"")">
                 <a>@Localizer["Team1"]</a>
-                <input id="txtNameTeam1" class="form-control" type="text" @bind="@Match.NameTeam1" />
+                <select id="cmbMatchCustomTeam1" class="form-control" @onchange=@Team1Changed>
+                    <option selected value="0">@Localizer["CustomTeam1"]</option>
+                    @foreach (var team in TeamList)
+                    {
+                        @if (team.Id == Match.Team1Id)
+                        {
+                            <option selected value="@team.Id">@team.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@team.Id">@team.Name</option>
+                        }
+                    }
+                </select>
+
+                <div class="panel @(Team1NameCollapsed?"collapse":"")">
+                    <InputText id="txtMatchTeam1" type="text" class="form-control" placeholder="@Localizer["Team1Name"]" @bind-Value="@Match.NameTeam1" />
+                    <ValidationMessage For="@(() => Match.NameTeam1)" />
+                </div>
                 <br />
 
                 <a>@Localizer["Team2"]</a>
-                <input id="txtNameTeam2" class="form-control" type="text" @bind="@Match.NameTeam2" />
+                <select id="cmbMatchCustomTeam2" class="form-control" @onchange=@Team2Changed>
+                    <option selected value="0">@Localizer["CustomTeam2"]</option>
+                    @foreach (var team in TeamList)
+                    {
+                        @if (team.Id == Match.Team1Id)
+                        {
+                            <option selected value="@team.Id">@team.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@team.Id">@team.Name</option>
+                        }
+                    }
+                </select>
+
+                <div class="panel @(Team2NameCollapsed?"collapse":"")">
+                    <InputText id="txtMatchTeam2" type="text" class="form-control" placeholder="@Localizer["Team2Name"]" @bind-Value="@Match.NameTeam2" />
+                    <ValidationMessage For="@(() => Match.NameTeam2)" />
+                </div>
                 <br />
 
                 <a>@Localizer["TimeleftSeconds"]</a>
@@ -91,6 +127,7 @@ else
 
 @code {
     private DtoMatch Match;
+    private DtoTeam[] TeamList;
 
     [Parameter]
     public string Id { get; set; }
@@ -100,9 +137,14 @@ else
     private int TimeLeftSeconds { get { return Match.TimeLeftSeconds.Value % 60; } }
     private System.Timers.Timer tmrMatchtime = new System.Timers.Timer(1000);
 
+    private bool Team1NameCollapsed = false;
+    private bool Team2NameCollapsed = false;
+
     protected override async Task OnInitializedAsync()
     {
         Match = await ApiSrv.GetMatchAsync(Convert.ToInt32(Id));
+        TeamList = (await ApiSrv.GetTeamListAsync()).ToArray();
+
         tmrMatchtime.Elapsed += OnTmrMatchtimeElapsed;
         tmrMatchtime.Start();
     }
@@ -164,5 +206,36 @@ else
         await ApiSrv.SetMatchGoalAsync(Match.Id, 1, -1);
         Match.ScoreTeam2--;
         await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    void Team1Changed(ChangeEventArgs e)
+    {
+        Match.Team1Id = Convert.ToInt32(e.Value);
+        if (Match.Team1Id == 0)
+        {
+            Team1NameCollapsed = false;
+            Match.NameTeam1 = "";
+        }
+        else
+        {
+            Team1NameCollapsed = true;
+            Match.NameTeam1 = "None";
+        }
+    }
+
+
+    void Team2Changed(ChangeEventArgs e)
+    {
+        Match.Team2Id = Convert.ToInt32(e.Value);
+        if (Match.Team2Id == 0)
+        {
+            Team2NameCollapsed = false;
+            Match.NameTeam2 = "";
+        }
+        else
+        {
+            Team2NameCollapsed = true;
+            Match.NameTeam2 = "None";
+        }
     }
 }
