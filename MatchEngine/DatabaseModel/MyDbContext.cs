@@ -48,8 +48,6 @@ namespace MatchEngine.DatabaseModel
                 entity.HasKey(e => new { e.TeamId, e.MatchId });
                 entity.HasOne(e => e.Team)
                     .WithMany(e => e.MatchList);
-                entity.HasOne(e => e.Match)
-                    .WithMany(e => e.TeamList);
             });
 
             // Tournaments
@@ -60,101 +58,6 @@ namespace MatchEngine.DatabaseModel
                 entity.HasMany(m => m.MatchList)
                     .WithOne(p => p.Tournament);
             });
-
-
-
-            //modelBuilder.Entity<Club>().ToTable("Clubs");
-            //modelBuilder.Entity<Club>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //    //entity.HasIndex(e => e.Name).IsUnique();
-            //    //entity.Property(e => e.Shortname);
-            //    //entity.Property(e => e.Displayname);
-            //    //entity.Property(e => e.DateTimeAdd).HasDefaultValueSql("CURRENT_TIMESTAMP");
-            //});
-
-            //modelBuilder.Entity<Player>().ToTable("Players");
-            //modelBuilder.Entity<Player>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //});
-
-            //modelBuilder.Entity<TournamentPlayer>().ToTable("TournamentPlayers");
-            //modelBuilder.Entity<TournamentPlayer>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //});
-
-            //modelBuilder.Entity<MatchPlayer>().ToTable("MatchPlayers");
-            //modelBuilder.Entity<MatchPlayer>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //});
-
-            //modelBuilder.Entity<TournamentTeam>().ToTable("TournamentTeams");
-            //modelBuilder.Entity<TournamentTeam>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //    entity.HasMany(m => m.PlayerList)
-            //        .WithOne(p => p.Team);
-            //});
-
-            //modelBuilder.Entity<MatchTeam>().ToTable("MatchTeams");
-            //modelBuilder.Entity<MatchTeam>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //});
-
-
-            //modelBuilder.Entity<MatchGoal>().ToTable("MatchGoals");
-            //modelBuilder.Entity<MatchGoal>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //});
-
-
-            //modelBuilder.Entity<MatchHalftime>().ToTable("MatchHalftimes");
-            //modelBuilder.Entity<MatchHalftime>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //});
-
-            //modelBuilder.Entity<MatchConfiguration>().ToTable("MatchConfigurations");
-            //modelBuilder.Entity<MatchConfiguration>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //    entity.HasMany(m => m.Halftimes)
-            //        .WithOne(p => p.Match);
-            //});
-
-            //modelBuilder.Entity<MatchInfo>().ToTable("MatchInfos");
-            //modelBuilder.Entity<MatchInfo>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //    entity.HasMany(m => m.Team1Score)
-            //        .WithOne(p => p.MatchTeam1);
-            //    entity.HasMany(m => m.Team2Score)
-            //        .WithOne(p => p.MatchTeam2);
-            //    entity.HasMany(m => m.RefereeList)
-            //        .WithOne(p => p.RefereeMatch);
-            //});
-
-
-            //modelBuilder.Entity<StandaloneMatch>().ToTable("StandaloneMatch");
-            //modelBuilder.Entity<StandaloneMatch>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //    entity.HasMany(e => e.Teams)
-            //        .WithOne(p => p.StandaloneMatch);
-
-            //});
-
-
-            //modelBuilder.Entity<StandaloneTeam>().ToTable("StandaloneTeams");
-            //modelBuilder.Entity<StandaloneTeam>(entity =>
-            //{
-            //    entity.HasKey(e => e.Id);
-            //});
 
             //base.OnModelCreating(modelBuilder);
         }

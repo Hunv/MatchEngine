@@ -79,9 +79,6 @@ namespace MatchEngine.Api
                     if (match.TournamentId.HasValue)
                         dto.Tournament = dbContext.Tournaments.SingleOrDefault(x => x.Id == match.TournamentId);
 
-                    if (match.TeamIdList != null)
-                        dto.TeamList = dbContext.Teams2Matches.Where(x => match.TeamIdList.Contains(x.TeamId)).ToList();
-
                     if (match.Team1Id != null)
                         dto.Team1Id = match.Team1Id.Value;
 

@@ -66,10 +66,5 @@ namespace MatchLibrary.ApiModel
         /// Only for Livematches: The current status of the Match (see EnumMatchStatus for ID resolution)
         /// </summary>
         public int MatchStatus { get; set; }
-
-        /// <summary>
-        /// List of Team Ids that participate at this match
-        /// </summary>
-        public List<int> TeamIdList { get; set; }
     }
 }
