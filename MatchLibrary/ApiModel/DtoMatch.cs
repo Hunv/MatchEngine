@@ -66,5 +66,10 @@ namespace MatchLibrary.ApiModel
         /// Only for Livematches: The current status of the Match (see EnumMatchStatus for ID resolution)
         /// </summary>
         public int MatchStatus { get; set; }
+
+        /// <summary>
+        /// The Scheduled time when the match should start
+        /// </summary>
+        public DateTime? ScheduledTime { get; set; }
     }
 }

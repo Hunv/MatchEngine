@@ -129,6 +129,12 @@
   <data name="Save" xml:space="preserve">
     <value>Save...</value>
   </data>
+  <data name="ScheduledDate" xml:space="preserve">
+    <value>Scheduled Date</value>
+  </data>
+  <data name="ScheduledTime" xml:space="preserve">
+    <value>Scheduled Time</value>
+  </data>
   <data name="ScoresTeam1" xml:space="preserve">
     <value>Score Team 1</value>
   </data>

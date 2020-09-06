@@ -129,11 +129,41 @@
   <data name="MatchManage" xml:space="preserve">
     <value>Manage...</value>
   </data>
+  <data name="MatchStatusDraft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="MatchStatusEnded" xml:space="preserve">
+    <value>Ended</value>
+  </data>
+  <data name="MatchStatusFinished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="MatchStatusPlanned" xml:space="preserve">
+    <value>Planned</value>
+  </data>
+  <data name="MatchStatusRunning" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="MatchStatusUnknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="MatchStatusUpcomming" xml:space="preserve">
+    <value>Upcomming</value>
+  </data>
+  <data name="ScheduledTime" xml:space="preserve">
+    <value>Scheduled</value>
+  </data>
+  <data name="Score" xml:space="preserve">
+    <value>Score</value>
+  </data>
   <data name="ScoreTeam1" xml:space="preserve">
     <value>Score Team 1</value>
   </data>
   <data name="ScoreTeam2" xml:space="preserve">
     <value>Score Team 2</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
   </data>
   <data name="Team1" xml:space="preserve">
     <value>Team 1</value>

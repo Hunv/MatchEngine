@@ -73,6 +73,11 @@ namespace MatchEngine.DatabaseModel
         public int MatchStatus { get; set; }
 
         /// <summary>
+        /// The Scheduled time when the match should start
+        /// </summary>
+        public DateTime? ScheduledTime { get; set; }
+
+        /// <summary>
         /// Converts the object to a DTO object
         /// </summary>
         /// <returns></returns>
@@ -88,7 +93,8 @@ namespace MatchEngine.DatabaseModel
                 TimeLeftSeconds = TimeLeftSeconds,
                 MatchStatus = MatchStatus,
                 Team1Id = Team1Id,
-                Team2Id = Team2Id
+                Team2Id = Team2Id,
+                ScheduledTime = ScheduledTime
             };
 
             if (Tournament != null)
@@ -113,6 +119,7 @@ namespace MatchEngine.DatabaseModel
             MatchStatus = dto.MatchStatus;
             Team1Id = dto.Team1Id ?? 0;
             Team2Id = dto.Team2Id ?? 0;
+            ScheduledTime = dto.ScheduledTime;
         }
 
     }

@@ -43,6 +43,7 @@ else
     <h1 class="text-center">@Localizer["Timeleft"]:</h1>
     <h1 class="text-center">@TimeLeftMinutes.ToString("D2"):@TimeLeftSeconds.ToString("D2")</h1>
     <br />
+
     <br />
 
     <button class="btn btn-primary" @onclick="StartGame">@Localizer["StartMatch"]</button>
@@ -56,8 +57,7 @@ else
     <EditForm Model="@Match" OnValidSubmit="@SaveMatch">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <div class="panel border">
-            @*<h4>Spiel Details ändern</h4>*@
+        <div class="panel">
             <button class="btn btn-primary" @onclick="e => this.EditCollapsed = !this.EditCollapsed">
                 @( this.EditCollapsed ? Localizer["ShowMatchDetails"] : Localizer["HideMatchDetails"])
             </button>
@@ -116,6 +116,14 @@ else
 
                 <a>@Localizer["ScoresTeam2"]</a>
                 <input id="txtScoreTeam2" class="form-control" type="text" @bind="@Match.ScoreTeam2" />
+                <br />
+
+                <a>@Localizer["ScheduledTime"]</a>
+                <input id="txtScheduledTime" class="form-control" width="150" type="time" @bind="@Match.ScheduledTime" />
+                <br />
+
+                <a>@Localizer["ScheduledDate"]</a>
+                <input id="txtScheduledDate" class="form-control" width="150" type="date" @bind="@Match.ScheduledTime" />
                 <br />
 
                 <button class="btn btn-primary" type="submit">@Localizer["Save"]</button>

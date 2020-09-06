@@ -68,7 +68,15 @@ else
 
     <a>@Localizer["HalftimeLength"]</a>
     @*<InputText id="txtaMatchTeam2" class="form-control" placeholder="@Localizer["Team2Name"]" @bind-Value="@Matchtime" />*@
-    <input id="txtMatchHalftimeLength" class="form-control" type="text" @bind="Matchtime" />
+    <input id="txtMatchHalftimeLength" class="form-control" width="150" type="text" @bind="Matchtime" />
+    <br />
+
+    <a>@Localizer["ScheduledTime"]</a>
+    <input id="txtScheduledTime" class="form-control" width="150" type="time" @bind="@newMatch.ScheduledTime" />
+    <br />
+
+    <a>@Localizer["ScheduledDate"]</a>
+    <input id="txtScheduledDate" class="form-control" width="150" type="date" @bind="@newMatch.ScheduledTime" />
     <br />
 
     <a>@Localizer["Tournament"]</a>

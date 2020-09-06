@@ -84,6 +84,12 @@ namespace MatchEngine.Api
 
                     if (match.Team2Id != null)
                         dto.Team2Id = match.Team2Id.Value;
+
+                    if (match.MatchStatus != 0)
+                        dto.MatchStatus = match.MatchStatus;
+
+                    if (match.ScheduledTime.HasValue)
+                        dto.ScheduledTime = match.ScheduledTime;
                     
                     await dbContext.SaveChangesAsync();
                 }
@@ -102,7 +108,9 @@ namespace MatchEngine.Api
                     NameTeam2 = match.NameTeam2,
                     TimeLeftSeconds = match.TimeLeftSeconds ?? 0,
                     Team1Id = match.Team1Id ?? 0,
-                    Team2Id = match.Team2Id ?? 0
+                    Team2Id = match.Team2Id ?? 0,
+                    ScheduledTime = match.ScheduledTime,
+                    MatchStatus = match.MatchStatus == 0 ? 1 : match.MatchStatus //set to draft status if no Status is set                    
                 };
                 if (match.TournamentId != 0)
                 {                    
