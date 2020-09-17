@@ -29,7 +29,7 @@ namespace MatchFrontend
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
+            services.AddLocalization(options => { options.ResourcesPath = "Resources"; });            
 
             //services.Configure<RequestLocalizationOptions>(
             //    options =>
@@ -57,6 +57,7 @@ namespace MatchFrontend
 #endif
             services.AddServerSideBlazor();
             services.AddSingleton<ApiService>();
+            services.AddSingleton<Settings>(); //Add the Settings to be available for all pages if injected
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

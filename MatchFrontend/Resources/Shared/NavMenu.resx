@@ -147,4 +147,7 @@
   <data name="Clublist" xml:space="preserve">
     <value>Club list</value>
   </data>
+  <data name="ManageTournament" xml:space="preserve">
+    <value>Manage Tournament</value>
+  </data>
 </root>

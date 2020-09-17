@@ -1,7 +1,78 @@
 ﻿@page "/"
+@using MatchFrontend.Data
+@using MatchLibrary.ApiModel
+@inject NavigationManager NavigationManager
+@inject ApiService ApiSrv
+@inject MatchFrontend.Data.Settings Settings
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Index> Localizer
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+@if (tournamentList == null)
+{
+    <p><em>@Localizer["Loading"]</em></p>
+}
+else
+{
+    if (Settings.SelectedTournamentId == 0)
+    {
+        //No Tournament is selected. To it is expected, that the organizer is entering this page.
+        <h1>@Localizer["WelcomeOrganiser"]</h1>
+        @if (tournamentList.Length == 0)
+        {
+            //No tournament exists
+            @Localizer["IntroductionTextNoTournament"]
+            <br />
+            <a href="/addtournament">@(Localizer["AddTournament"])</a>
+        }
+        else
+        {
+            @Localizer["IntroductionTextSelectTournament"]
+            <br />
+            <select id="cmbIndexTournament" class="form-control" @onchange=@TournamentChanged>
+                <option selected value="0">@Localizer["SelectPlease"]</option>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+                @foreach (var tournament in tournamentList)
+                {
+                    <option value="@tournament.Id">@tournament.Name</option>
+                }
+            </select>
+            <br />
+            @Localizer["OrAddNewTournament"]
+            <br />
+            <a href="/addtournament">@(Localizer["AddTournament"])</a>
+        }
+    }
+    else
+    {
+        
+    }
+}
+
+@code {
+    private DtoTournament[] tournamentList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tournamentList = (await ApiSrv.GetTournamentListAsync()).ToArray();
+
+        if (Settings.SelectedTournamentId != 0)
+            NavigationManager.NavigateTo("/dashboard", true);
+    }
+
+    void TournamentChanged(ChangeEventArgs e)
+    {
+        //Set the global SelectedTournamentId Setting
+        Settings.SelectedTournamentId = Convert.ToInt32(e.Value);
+
+
+        if (Settings.SelectedTournamentId != 0)
+        {
+            Settings.SelectedTournamentName = tournamentList.Single(x => x.Id == Settings.SelectedTournamentId).Name;
+            NavigationManager.NavigateTo("/dashboard", true);
+        }
+        else
+        {
+            Settings.SelectedTournamentName = "";
+        }
+    }
+}

@@ -136,10 +136,10 @@
     <value>Verwalten...</value>
   </data>
   <data name="MatchCreate" xml:space="preserve">
-    <value>Match erstellen</value>
+    <value>Spiel erstellen</value>
   </data>
   <data name="MatchList" xml:space="preserve">
-    <value>Matchliste</value>
+    <value>Turnier Spielübersicht</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -155,6 +155,9 @@
   </data>
   <data name="ScoresTeam2" xml:space="preserve">
     <value>Punkte Team 2</value>
+  </data>
+  <data name="SelectTournamentFirst" xml:space="preserve">
+    <value>Wähle zuerst ein Turnier aus bevor das Turnier verwaltet werden kann</value>
   </data>
   <data name="ShowDetails" xml:space="preserve">
     <value>Zeige Turnierdetails</value>

@@ -39,11 +39,11 @@ namespace MatchEngine.Api
         {
             using (var dbContext = new MyDbContext())
             {
-                var dto = dbContext.Tournaments.SingleOrDefault(x => x.Id == id);
+                var dto = dbContext.Matches.Where(x => x.Tournament.Id == id);
                 if (dto == null)
                     return "";
 
-                return JsonConvert.SerializeObject(dto.MatchList, Helper.GetJsonSerializer());
+                return JsonConvert.SerializeObject(dto, Helper.GetJsonSerializer());
             }
         }
                 

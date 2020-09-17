@@ -61,7 +61,7 @@ else
             <button class="btn btn-primary" @onclick="e => this.EditCollapsed = !this.EditCollapsed">
                 @( this.EditCollapsed ? Localizer["ShowMatchDetails"] : Localizer["HideMatchDetails"])
             </button>
-            <div class="panel border @(EditCollapsed?"collapse":"")">
+            <div class="panel @(EditCollapsed?"collapse":"")">
                 <a>@Localizer["Team1"]</a>
                 <select id="cmbMatchCustomTeam1" class="form-control" @onchange=@Team1Changed>
                     <option selected value="0">@Localizer["CustomTeam1"]</option>

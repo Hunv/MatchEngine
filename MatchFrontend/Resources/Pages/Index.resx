@@ -117,58 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="AddTournament" xml:space="preserve">
+    <value>Create Tournament...</value>
   </data>
-  <data name="Date" xml:space="preserve">
-    <value>Date</value>
+  <data name="IntroductionTextNoTournament" xml:space="preserve">
+    <value>Currently no tournament is selected. To make the dashboard avaiable to all users, create and select a torunament first.</value>
   </data>
-  <data name="HideDetails" xml:space="preserve">
-    <value>Hide tournament details...</value>
+  <data name="IntroductionTextSelectTournament" xml:space="preserve">
+    <value>Select the upcomming tournament to make the dashboard available to all users.</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Loading...</value>
   </data>
-  <data name="Location" xml:space="preserve">
-    <value>Location</value>
+  <data name="OrAddNewTournament" xml:space="preserve">
+    <value>If your tournament does not already exists, create a new one:</value>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>Manage...</value>
+  <data name="SelectPlease" xml:space="preserve">
+    <value>-- Select tournament --</value>
   </data>
-  <data name="MatchCreate" xml:space="preserve">
-    <value>Create match</value>
-  </data>
-  <data name="MatchList" xml:space="preserve">
-    <value>Tournament Matchlist</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="Organizer" xml:space="preserve">
-    <value>Organizer</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save...</value>
-  </data>
-  <data name="ScoresTeam1" xml:space="preserve">
-    <value>Score Team 1</value>
-  </data>
-  <data name="ScoresTeam2" xml:space="preserve">
-    <value>Score Team 2</value>
-  </data>
-  <data name="SelectTournamentFirst" xml:space="preserve">
-    <value>Select a tournament first before managing a tournament</value>
-  </data>
-  <data name="ShowDetails" xml:space="preserve">
-    <value>Show tournament details...</value>
-  </data>
-  <data name="Team1" xml:space="preserve">
-    <value>Team 1</value>
-  </data>
-  <data name="Team2" xml:space="preserve">
-    <value>Team 2</value>
-  </data>
-  <data name="Timeleft" xml:space="preserve">
-    <value>Time left</value>
+  <data name="WelcomeOrganiser" xml:space="preserve">
+    <value>Welcome Organizer</value>
   </data>
 </root>

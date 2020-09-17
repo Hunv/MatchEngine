@@ -7,10 +7,15 @@
 @inject NavigationManager NavigationManager
 @inject ApiService ApiSrv
 @inject Microsoft.Extensions.Localization.IStringLocalizer<ManageTournament> Localizer
+@inject MatchFrontend.Data.Settings Settings
 
 @if (Tournament == null || Matches == null)
 {
     <p><em>@Localizer["Loading"]</em></p>
+}
+else if (Settings.SelectedTournamentId == 0)
+{
+    <p>@Localizer["SelectTournamentFirst"]</p>
 }
 else
 {
@@ -46,12 +51,12 @@ else
         </tbody>
     </table>
     <br />
-    <div class="panel border">
+    <div class="panel">
         @*<h3>Turnier Details ändern</h3>*@
         <button class="btn btn-primary" @onclick="e => this.EditCollapsed = !this.EditCollapsed">
             @( this.EditCollapsed ? Localizer["ShowDetails"] : Localizer["HideDetails"])
         </button>
-        <div class="panel border @(EditCollapsed?"collapse":"")">
+        <div class="panel @(EditCollapsed?"collapse":"")">
             <EditForm Model="@Tournament" OnValidSubmit="@SaveTournament">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
@@ -98,8 +103,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Tournament = await ApiSrv.GetTournamentAsync(Convert.ToInt32(Id));
-        Matches = await ApiSrv.GetMatchListAsync(Tournament.Id) ?? new List<DtoMatch>();
+        if (Settings.SelectedTournamentId != 0)
+        {
+            Tournament = await ApiSrv.GetTournamentAsync(Convert.ToInt32(Id));
+            Matches = await ApiSrv.GetMatchListAsync(Tournament.Id) ?? new List<DtoMatch>();
+        }
     }
 
     private async void SaveTournament()
