@@ -21,7 +21,7 @@ else
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <a>@Localizer["Team1"]</a>
+    <a>@Localizer["Team1"]</a>  <a class="font-italic" href=@("/addteam?origin=" + Uri.EscapeDataString(NavigationManager.ToBaseRelativePath(NavigationManager.Uri) + "&set=team1"))>@Localizer["CreateTeam"]</a>
     <select id="cmbMatchCustomTeam1" class="form-control" @onchange=@Team1Changed>
         <option selected value="0">@Localizer["CustomTeam1"]</option>
         @foreach (var team in teamList)
@@ -45,7 +45,7 @@ else
     <br />
 
 
-    <a>@Localizer["Team2"]</a>
+    <a>@Localizer["Team2"]</a>  <a class="font-italic" href=@("/addteam?origin=" + Uri.EscapeDataString(NavigationManager.ToBaseRelativePath(NavigationManager.Uri) + "&set=team2"))>@Localizer["CreateTeam"]</a>
     <select id="cmbMatchCustomTeam2" class="form-control" @onchange=@Team2Changed>
         <option selected value="0">@Localizer["CustomTeam2"]</option>
         @foreach (var team in teamList)
@@ -113,23 +113,58 @@ else
         set { newMatch.TimeLeftSeconds = (int)value.TotalSeconds; }
     }
 
-
     private bool Team1NameCollapsed = false;
     private bool Team2NameCollapsed = false;
 
     protected override async Task OnInitializedAsync()
     {
-        //newMatch.Tournament = new DtoTournament();
-        //newMatch.NameTeam1 = "";
-        //newMatch.NameTeam2 = "";
         tournamentList = (await ApiSrv.GetTournamentListAsync()).ToArray();
         teamList = (await ApiSrv.GetTeamListAsync()).ToArray();
+
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("tournamentid", out var _tournamentId))
+        {
+            newMatch.TournamentId = Convert.ToInt32(_tournamentId);
+        }
+
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("date", out var _date))
+        {
+            newMatch.ScheduledTime = Convert.ToDateTime(_date);
+        }
+
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("time", out var _time))
+        {
+            if (newMatch.ScheduledTime.HasValue)
+            {
+                newMatch.ScheduledTime = newMatch.ScheduledTime.Value.Add(TimeSpan.Parse(_time));
+            }
+        }
+
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("length", out var _length))
+        {
+            newMatch.TimeLeftSeconds = Convert.ToInt32(_length);
+        }
+
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("team1id", out var _team1id))
+        {
+            newMatch.Team1Id = Convert.ToInt32(_team1id);
+            Team1NameCollapsed = true;
+            newMatch.NameTeam1 = "None";
+        }
+
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("team2id", out var _team2id))
+        {
+            newMatch.Team2Id = Convert.ToInt32(_team2id);
+            Team2NameCollapsed = true;
+            newMatch.NameTeam2 = "None";
+        }
     }
 
     private async void SaveMatch()
     {
         if (!newMatch.TournamentId.HasValue && newMatch.TournamentId == 0)
             newMatch.TournamentId = null;
+
         await ApiSrv.AddMatchAsync(newMatch);
         NavigationManager.NavigateTo("/match");
     }

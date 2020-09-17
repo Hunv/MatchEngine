@@ -144,6 +144,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="NoMatches" xml:space="preserve">
+    <value>Derzeit sind keine Spiele geplant. Klicken Sie auf "Spiel erstellen" um ein neues Spiel zu erstellen.</value>
+  </data>
   <data name="Organizer" xml:space="preserve">
     <value>Organisator</value>
   </data>

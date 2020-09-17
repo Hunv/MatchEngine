@@ -1,5 +1,4 @@
-﻿
-@page "/tournament/{id}"
+﻿@page "/tournament/{id}"
 @using MatchFrontend.Data
 @using System.Net.Http
 @using System.Web
@@ -20,36 +19,43 @@ else if (Settings.SelectedTournamentId == 0)
 else
 {
     <h1>@Localizer["MatchList"]</h1>
-    <a href="/addmatch">@Localizer["MatchCreate"]</a>
+    <a href=@("/addmatch?tournamentid=" + Id)>@Localizer["MatchCreate"]</a>
     <br />
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@Localizer["Team1"]</th>
-                <th>@Localizer["Team2"]</th>
-                <th>@Localizer["Timeleft"]</th>
-                <th>@Localizer["ScoresTeam1"]</th>
-                <th>@Localizer["ScoresTeam2"]</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Matches != null)
-            {
-                @foreach (var match in Matches)
+    @if (Matches.Count == 0)
+    {
+        @Localizer["NoMatches"]
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Localizer["Team1"]</th>
+                    <th>@Localizer["Team2"]</th>
+                    <th>@Localizer["Timeleft"]</th>
+                    <th>@Localizer["ScoresTeam1"]</th>
+                    <th>@Localizer["ScoresTeam2"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Matches != null)
                 {
-                    <tr>
-                        <td>@match.NameTeam1</td>
-                        <td>@match.NameTeam2</td>
-                        <td>@match.TimeLeftSeconds</td>
-                        <td>@match.ScoreTeam1</td>
-                        <td>@match.ScoreTeam2</td>
-                        <td><a href="/match/@match.Id">@Localizer["Manage"]</a></td>
-                    </tr>
+                    @foreach (var match in Matches)
+                    {
+                        <tr>
+                            <td>@match.NameTeam1</td>
+                            <td>@match.NameTeam2</td>
+                            <td>@match.TimeLeftSeconds</td>
+                            <td>@match.ScoreTeam1</td>
+                            <td>@match.ScoreTeam2</td>
+                            <td><a href="/match/@match.Id">@Localizer["Manage"]</a></td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    }
     <br />
     <div class="panel">
         @*<h3>Turnier Details ändern</h3>*@

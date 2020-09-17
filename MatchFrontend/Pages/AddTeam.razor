@@ -1,5 +1,4 @@
-﻿
-@page "/addteam"
+﻿@page "/addteam"
 @using MatchFrontend.Data
 @using System.Net.Http
 @using System.Web
@@ -11,7 +10,7 @@
 
 <h1>@Localizer["TeamCreate"]</h1>
 
-@if (1 == 2)@*(teamList == null || refereeList == null)*@
+@if (clubList == null)
 {
     <p><em>@Localizer["Loading"]</em></p>
 }
@@ -20,6 +19,17 @@ else
 <EditForm Model="@newTeam" OnValidSubmit="@SaveTeam">
     <DataAnnotationsValidator />
     <ValidationSummary />
+
+    <a>@Localizer["Club"]</a>  <a href="/addclub" class="font-italic">@Localizer["CreateClub"]</a>
+    @*<InputText id="txtTeamClub" type="text" class="form-control" @bind-Value="newTeam.Club" />*@
+    <select id="cmbClub" class="form-control" @onchange=@ClubChanged>
+        <option selected value="0">@Localizer["SelectClub"]</option>
+        @foreach (var club in clubList)
+        {
+            <option value="@club.Id">@club.OfficalName</option>
+        }
+    </select>
+    <br />
 
     <a>@Localizer["Name"]</a>
     <InputText id="txtTeamName" type="text" class="form-control" @bind-Value="newTeam.Name" />
@@ -51,11 +61,6 @@ else
     <ValidationMessage For="@(() => newTeam.Coach)" />
     <br />
 
-    <a>@Localizer["Club"]</a>
-    <InputText id="txtTeamClub" type="text" class="form-control" @bind-Value="newTeam.Club" />
-    <ValidationMessage For="@(() => newTeam.Club)" />
-    <br />
-
     <a>@Localizer["Notes"]</a>
     <InputText id="txtTeamNotes" type="text" class="form-control" @bind-Value="newTeam.Notes" />
     <ValidationMessage For="@(() => newTeam.Notes)" />
@@ -67,15 +72,62 @@ else
 
 @code {
     private DtoTeam newTeam = new DtoTeam();
+    private DtoClub[] clubList = null;
+    private string nextUrl = "/team";
 
-    //protected override async Task OnInitializedAsync()
-    //{
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("origin", out var _origin))
+        {
+            nextUrl = "/" + _origin;
+        }
 
-    //}
+        clubList = (await ApiSrv.GetClubListAsync()).ToArray();
+    }
 
     private async void SaveTeam()
     {
-        await ApiSrv.AddTeamAsync(newTeam);
-        NavigationManager.NavigateTo("/team");
+        //Check if Name is already taken
+        var teams = await ApiSrv.GetTeamListAsync();
+        if (teams.Select(x => x.Name).Contains(newTeam.Name))
+        {
+
+        }
+        else
+        {
+            await ApiSrv.AddTeamAsync(newTeam);
+            teams = await ApiSrv.GetTeamListAsync(); //Update teams
+
+            var navigateTeam = nextUrl.Contains("&set=team1") ? "&team1id=" : "&team2id=";
+
+            //Remove already existing team#id parameters
+            var regEx = new System.Text.RegularExpressions.Regex(navigateTeam + @"\d*");
+            var match = regEx.Match(nextUrl);
+            while (match.Success)
+            {
+                nextUrl = nextUrl.Replace(match.Value, "");
+                match = regEx.Match(nextUrl);
+            }
+
+            //add the Id to the navigateTeam string
+            navigateTeam += teams.Single(x => x.Name == newTeam.Name).Id;
+
+            //Remove the set=team# parameter
+            regEx = new System.Text.RegularExpressions.Regex("&set=team\\d");
+            match = regEx.Match(nextUrl);
+            while(match.Success)
+            {
+                nextUrl = nextUrl.Replace(match.Value, "");
+                match = regEx.Match(nextUrl);
+            }
+
+            NavigationManager.NavigateTo(nextUrl + navigateTeam);
+        }
+    }
+
+    void ClubChanged(ChangeEventArgs e)
+    {
+        newTeam.ClubId = Convert.ToInt32(e.Value);
     }
 }

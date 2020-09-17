@@ -59,12 +59,9 @@ namespace MatchLibrary.ApiModel
         public string Coach { get; set; }
 
         /// <summary>
-        /// The name of the club
+        /// ID of the Club
         /// </summary>
-        [MaxLength(256, ErrorMessage = "Der Name des Vereins kann höchstens aus 256 Zeichen bestehen.")]
-        [MinLength(2, ErrorMessage = "Der Name des Vereins muss mindestens aus zwei Zeichen bestehen.")]
-        [RegularExpression(@"^[a-zA-Z0-9\s-äüößÄÜÖ\.]*$", ErrorMessage = "Der Name des Vereins kann nur aus Buchstaben, Zahlen, Bindestrichen, Punkten und Leerzeichen bestehen")]
-        public string Club { get; set; }
+        public int ClubId { get; set; }
 
         /// <summary>
         /// Notes regarding this team

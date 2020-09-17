@@ -129,6 +129,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="NoClub" xml:space="preserve">
+    <value>Kein Verein</value>
+  </data>
   <data name="Shortcut" xml:space="preserve">
     <value>Abkürzung</value>
   </data>

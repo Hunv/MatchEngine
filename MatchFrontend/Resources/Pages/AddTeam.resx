@@ -135,6 +135,9 @@
   <data name="Save" xml:space="preserve">
     <value>Save...</value>
   </data>
+  <data name="SelectClub" xml:space="preserve">
+    <value>-- select club --</value>
+  </data>
   <data name="Shortcut" xml:space="preserve">
     <value>Shortcut</value>
   </data>

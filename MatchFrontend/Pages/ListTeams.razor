@@ -8,7 +8,7 @@
 @inject ApiService ApiSrv
 @inject Microsoft.Extensions.Localization.IStringLocalizer<ListTournaments> Localizer
 
-@if (TeamList == null)
+@if (TeamList == null || ClubList == null)
 {
     <p><em>@Localizer["Loading"]</em></p>
 }
@@ -32,7 +32,7 @@ else
                     <td>@team.Name</td>
                     <td>@team.Shortname</td>
                     <td>@team.Shortcut</td>
-                    <td>@team.Club</td>
+                    <td>@(team.ClubId == 0 ? Localizer["NoClub"] : ClubList.Single(x => x.Id == team.ClubId).OfficalName)</td>
                     <td>@team.Teamcaptain</td>
                     <td><a href="/team/@team.Id">@(Localizer["Manage"])</a></td>
                 </tr>
@@ -43,9 +43,11 @@ else
 
 @code {
     private List<DtoTeam> TeamList;
+    private List<DtoClub> ClubList;
 
     protected override async Task OnInitializedAsync()
     {
         TeamList = await ApiSrv.GetTeamListAsync();
+        ClubList = await ApiSrv.GetClubListAsync();
     }
 }

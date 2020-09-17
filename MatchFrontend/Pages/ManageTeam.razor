@@ -7,7 +7,7 @@
 @inject ApiService ApiSrv
 @inject Microsoft.Extensions.Localization.IStringLocalizer<ManageTournament> Localizer
 
-@if (Team == null)
+@if (Team == null || ClubList == null)
 {
     <p><em>@Localizer["Loading"]</em></p>
 }
@@ -52,8 +52,14 @@ else
         <br />
 
         <a>@Localizer["Club"]</a>
-        <InputText id="txtTeamClub" type="text" class="form-control" @bind-Value="Team.Club" />
-        <ValidationMessage For="@(() => Team.Club)" />
+        @*<InputText id="txtTeamClub" type="text" class="form-control" @bind-Value="Team.Club" />*@
+        <select id="cmbTeamClub" class="form-control" @onchange=@ClubChanged>
+            <option selected value="0">@Localizer["SelectClub"]</option>
+            @foreach (var club in ClubList)
+            {
+                <option value="@club.Id">@club.OfficalName</option>
+            }
+        </select>
         <br />
 
         <a>@Localizer["Notes"]</a>
@@ -67,6 +73,7 @@ else
 
 @code {
     private DtoTeam Team;
+    private DtoClub[] ClubList = null;
 
     [Parameter]
     public int Id { get; set; }
@@ -75,12 +82,19 @@ else
     protected override async Task OnInitializedAsync()
     {
         Team = await ApiSrv.GetTeamAsync(Id);
+        ClubList = (await ApiSrv.GetClubListAsync()).ToArray();
     }
 
     private async void SaveTeam()
     {
         await ApiSrv.SetTeamAsync(Team);
         NavigationManager.NavigateTo("/team");
+    }
+
+
+    void ClubChanged(ChangeEventArgs e)
+    {
+        Team.ClubId = Convert.ToInt32(e.Value);
     }
 
 }

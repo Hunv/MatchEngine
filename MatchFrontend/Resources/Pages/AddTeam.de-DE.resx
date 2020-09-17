@@ -135,6 +135,9 @@
   <data name="Save" xml:space="preserve">
     <value>Speichern...</value>
   </data>
+  <data name="SelectClub" xml:space="preserve">
+    <value>-- Verein auswählen --</value>
+  </data>
   <data name="Shortcut" xml:space="preserve">
     <value>Abkürzung</value>
   </data>

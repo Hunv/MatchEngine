@@ -58,7 +58,7 @@ namespace MatchEngine.DatabaseModel
         /// <summary>
         /// The name of the club
         /// </summary>
-        public string Club { get; set; }
+        public Club Club { get; set; }
 
         /// <summary>
         /// Notes regarding this team
@@ -85,7 +85,7 @@ namespace MatchEngine.DatabaseModel
             var dto = new DtoTeam()
             {
                 Id = Id,
-                Club = Club,
+                ClubId = Club == null ? 0 : Club.Id,
                 Coach = Coach,
                 Name = Name,
                 Notes = Notes,
@@ -110,8 +110,7 @@ namespace MatchEngine.DatabaseModel
         /// <param name="dto"></param>
         public void FromDto(DtoTeam dto)
         {
-            Id = dto.Id;
-            Club = dto.Club;
+            Id = dto.Id;            
             Coach = dto.Coach;
             Name = dto.Name;
             Notes = dto.Notes;
@@ -119,7 +118,8 @@ namespace MatchEngine.DatabaseModel
             Shortname = dto.Shortname;
             Teamcaptain = dto.Teamcaptain;
             ViceTeamcaptain = dto.ViceTeamcaptain;
-
+            
+            //Club = new Club() { Id = dto.ClubId };
             MatchList = dto.MatchIdList == null ? null : dto.MatchIdList.Select(x => new Team2Match() { MatchId = x, Team = this}).ToList();
             TournamentList = dto.TournamentIdList == null ? null : dto.TournamentIdList.Select(x => new Team2Tournament() { TournamentId = x, Team = this }).ToList();
         }

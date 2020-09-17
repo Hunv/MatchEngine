@@ -1,6 +1,7 @@
 ﻿using MatchEngine.DatabaseModel;
 using MatchLibrary;
 using MatchLibrary.ApiModel;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace MatchEngine.Api
             using (var dbContext = new MyDbContext())
             {
                 var dto = new List<DtoTeam>();
-                foreach (var aTeam in dbContext.Teams)
+                foreach (var aTeam in dbContext.Teams.Include("Club"))
                     dto.Add(aTeam.ToDto());
 
                 return JsonConvert.SerializeObject(dto, Helper.GetJsonSerializer());
@@ -49,8 +50,8 @@ namespace MatchEngine.Api
                 var tm = dbContext.Teams.SingleOrDefault(x => x.Id == team.Id);
                 if (tm != null)
                 {
-                    if (team.Club != null)
-                        tm.Club = team.Club;
+                    if (team.ClubId != null)
+                        tm.Club = dbContext.Clubs.Single(x => x.Id == team.ClubId);
 
                     if (team.Coach != null)
                         tm.Coach = team.Coach;
@@ -99,6 +100,9 @@ namespace MatchEngine.Api
 
                 if (dtoTeam.TournamentIdList != null)
                     team.TournamentList = dbContext.Teams2Tournaments.Where(x => dtoTeam.TournamentIdList.Contains(x.TournamentId)).ToList();
+
+                if (dtoTeam.ClubId != 0)
+                    team.Club = dbContext.Clubs.Single(x => x.Id == dtoTeam.ClubId);
 
                 dbContext.Teams.Add(team);
 
