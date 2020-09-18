@@ -133,7 +133,7 @@
     <value>Live Matches</value>
   </data>
   <data name="Matchlist" xml:space="preserve">
-    <value>Matchliste</value>
+    <value>Spielübersicht</value>
   </data>
   <data name="Teamlist" xml:space="preserve">
     <value>Mannschaftsliste</value>
@@ -146,5 +146,11 @@
   </data>
   <data name="Clublist" xml:space="preserve">
     <value>Vereinsliste</value>
+  </data>
+  <data name="ManageCurrentTournament" xml:space="preserve">
+    <value>Aktuelles Turnier verwalten</value>
+  </data>
+  <data name="ManageTournament" xml:space="preserve">
+    <value>Turniere verwalten</value>
   </data>
 </root>

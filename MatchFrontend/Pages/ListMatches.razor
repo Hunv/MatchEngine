@@ -9,7 +9,6 @@
 
 <h1>@Localizer["MatchList"]</h1>
 
-<a href="/addmatch">@Localizer["MatchCreate"]</a>
 
 @if (MatchList == null || TeamList == null || TournamentList == null)
 {
@@ -17,6 +16,8 @@
 }
 else
 {
+    <a href="/addmatch">@Localizer["MatchCreate"]</a>
+
     <table class="table">
         <thead>
             <tr>
@@ -32,33 +33,33 @@ else
         <tbody>
             @foreach (var match in MatchList)
             {
-            <tr>
-                <td>
-                    @if (!match.Team1Id.HasValue || match.Team1Id.Value == 0)
-                    {
-                        @match.NameTeam1;
-                    }
-                    else
-                    {
-                        @TeamList.Single(x => x.Id == match.Team1Id).Name;
-                    }
-            </td>
-            <td>
-                @if (!match.Team2Id.HasValue || match.Team2Id.Value == 0)
-                {
-                    @match.NameTeam2;
-                }
-                else
-                {
-                    @TeamList.Single(x => x.Id == match.Team2Id).Name;
-                }
-            </td>
-            <td>@match.ScoreTeam1:@match.ScoreTeam2</td>
-            <td>@match.ScheduledTime</td>
-            <td>@Localizer["MatchStatus" + Enum.GetName(typeof(MatchLibrary.Model.EnumMatchStatus), @match.MatchStatus)]</td>
-            <td>@(match.TournamentId.HasValue ? TournamentList.SingleOrDefault(x => x.Id == match.TournamentId.Value).Name : "")</td>
-            <td><a href="/match/@match.Id">@Localizer["MatchManage"]</a></td>
-            </tr>
+                <tr>
+                    <td>
+                        @if (!match.Team1Id.HasValue || match.Team1Id.Value == 0)
+                        {
+                            @match.NameTeam1;
+                        }
+                        else
+                        {
+                            @TeamList.Single(x => x.Id == match.Team1Id).Name;
+                        }
+                    </td>
+                    <td>
+                        @if (!match.Team2Id.HasValue || match.Team2Id.Value == 0)
+                        {
+                            @match.NameTeam2;
+                        }
+                        else
+                        {
+                            @TeamList.Single(x => x.Id == match.Team2Id).Name;
+                        }
+                    </td>
+                    <td>@match.ScoreTeam1:@match.ScoreTeam2</td>
+                    <td>@match.ScheduledTime</td>
+                    <td>@Localizer["MatchStatus" + Enum.GetName(typeof(MatchLibrary.Model.EnumMatchStatus), @match.MatchStatus)]</td>
+                    <td>@(match.TournamentId.HasValue ? TournamentList.SingleOrDefault(x => x.Id == match.TournamentId.Value).Name : "")</td>
+                    <td><a href="/match/@match.Id">@Localizer["MatchManage"]</a></td>
+                </tr>
             }
         </tbody>
     </table>

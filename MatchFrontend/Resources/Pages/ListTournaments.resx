@@ -138,4 +138,10 @@
   <data name="Organizer" xml:space="preserve">
     <value>Organizer</value>
   </data>
+  <data name="SetCurrent" xml:space="preserve">
+    <value>Set to current</value>
+  </data>
+  <data name="TournamentCreate" xml:space="preserve">
+    <value>Create Tournament...</value>
+  </data>
 </root>

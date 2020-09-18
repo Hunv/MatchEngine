@@ -7,6 +7,7 @@
 @inject NavigationManager NavigationManager
 @inject ApiService ApiSrv
 @inject Microsoft.Extensions.Localization.IStringLocalizer<ListTournaments> Localizer
+@inject MatchFrontend.Data.Settings Settings
 
 @if (TournamentList == null)
 {
@@ -14,6 +15,8 @@
 }
 else
 {
+    <a href="/addtournament">@Localizer["TournamentCreate"]</a>
+
     <table class="table">
         <thead>
             <tr>
@@ -22,6 +25,7 @@ else
                 <th>@Localizer["City"]</th>
                 <th>@Localizer["Location"]</th>
                 <th>@Localizer["Organizer"]</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -35,6 +39,12 @@ else
                     <td>@tournament.Location</td>
                     <td>@tournament.Organisator</td>
                     <td><a href="/tournament/@tournament.Id">@(Localizer["Manage"])</a></td>
+                    <td>
+                        @if (tournament.Id != Settings.SelectedTournamentId)
+                        {
+                            <button class="btn btn-primary" @onclick="@(e => SetActive(tournament.Id))">@Localizer["SetCurrent"]</button>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -47,5 +57,14 @@ else
     protected override async Task OnInitializedAsync()
     {
         TournamentList = await ApiSrv.GetTournamentListAsync();
+    }
+
+    private async void SetActive(int tournamentId)
+    {
+        await ApiSrv.SetSettingAsync(new DtoSetting() { Name = "SelectedTournament", Value = tournamentId.ToString() });
+        Settings.SelectedTournamentId = tournamentId;
+        Settings.SelectedTournamentName = TournamentList.Single(x => x.Id == tournamentId).Name;
+
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
 }

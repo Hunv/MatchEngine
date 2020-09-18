@@ -141,4 +141,7 @@
   <data name="Teamcaptain" xml:space="preserve">
     <value>Team Kapitän</value>
   </data>
+  <data name="TeamCreate" xml:space="preserve">
+    <value>Team erstellen...</value>
+  </data>
 </root>
