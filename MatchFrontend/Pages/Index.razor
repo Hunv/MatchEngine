@@ -55,16 +55,12 @@ else
     {
         //Get the selected Tournament Id
         Settings.SelectedTournamentId = Convert.ToInt32((await ApiSrv.GetSettingAsync("SelectedTournament")).Value);
+        tournamentList = (await ApiSrv.GetTournamentListAsync()).ToArray();
 
         if (Settings.SelectedTournamentId != 0)
         {
-            tournamentList = new DtoTournament[0]; //it is not null anymore and the page will load
+            Settings.SelectedTournamentName = tournamentList.Single(x => x.Id == Settings.SelectedTournamentId).Name;
             NavigationManager.NavigateTo("/dashboard", true);
-        }
-        else
-        {
-            //Get all Tournaments
-            tournamentList = (await ApiSrv.GetTournamentListAsync()).ToArray();
         }
     }
 
