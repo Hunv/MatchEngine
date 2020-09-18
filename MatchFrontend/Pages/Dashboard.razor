@@ -105,19 +105,22 @@ else
             var updatedData = await ApiSrv.GetLiveMatchListAsync();
             foreach (var ud in updatedData)
             {
-                LiveMatchList.Single(x => x.Id == ud.Id).ScoreTeam1 = ud.ScoreTeam1;
-                LiveMatchList.Single(x => x.Id == ud.Id).ScoreTeam2 = ud.ScoreTeam2;
+                if (LiveMatchList.Any(x => x.Id == ud.Id))
+                {
+                    LiveMatchList.Single(x => x.Id == ud.Id).ScoreTeam1 = ud.ScoreTeam1;
+                    LiveMatchList.Single(x => x.Id == ud.Id).ScoreTeam2 = ud.ScoreTeam2;
 
 
-                //To count the seconds more smoothly, only correct the seconds, if the diff is more than 1 second
-                if (LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds - ud.TimeLeftSeconds > 1 ||
-                    LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds - ud.TimeLeftSeconds < 1)
-                {
-                    LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds = ud.TimeLeftSeconds;
-                }
-                else
-                {
-                    LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds--;
+                    //To count the seconds more smoothly, only correct the seconds, if the diff is more than 1 second
+                    if (LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds - ud.TimeLeftSeconds > 1 ||
+                        LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds - ud.TimeLeftSeconds < 1)
+                    {
+                        LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds = ud.TimeLeftSeconds;
+                    }
+                    else
+                    {
+                        LiveMatchList.Single(x => x.Id == ud.Id).TimeLeftSeconds--;
+                    }
                 }
             }
         }

@@ -141,6 +141,27 @@
   <data name="MatchList" xml:space="preserve">
     <value>Turnier Spielübersicht</value>
   </data>
+  <data name="MatchStatusDraft" xml:space="preserve">
+    <value>Entwurf</value>
+  </data>
+  <data name="MatchStatusEnded" xml:space="preserve">
+    <value>Beendet</value>
+  </data>
+  <data name="MatchStatusFinished" xml:space="preserve">
+    <value>Abgeschlossen</value>
+  </data>
+  <data name="MatchStatusPlanned" xml:space="preserve">
+    <value>Geplant</value>
+  </data>
+  <data name="MatchStatusRunning" xml:space="preserve">
+    <value>Läuft</value>
+  </data>
+  <data name="MatchStatusUnknown" xml:space="preserve">
+    <value>Unbekannt</value>
+  </data>
+  <data name="MatchStatusUpcomming" xml:space="preserve">
+    <value>Anstehend</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
@@ -153,17 +174,17 @@
   <data name="Save" xml:space="preserve">
     <value>Speichern...</value>
   </data>
-  <data name="ScoresTeam1" xml:space="preserve">
-    <value>Punkte Team 1</value>
-  </data>
-  <data name="ScoresTeam2" xml:space="preserve">
-    <value>Punkte Team 2</value>
+  <data name="Score" xml:space="preserve">
+    <value>Spielstand</value>
   </data>
   <data name="SelectTournamentFirst" xml:space="preserve">
     <value>Wähle zuerst ein Turnier aus bevor das Turnier verwaltet werden kann</value>
   </data>
   <data name="ShowDetails" xml:space="preserve">
     <value>Zeige Turnierdetails</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
   </data>
   <data name="Team1" xml:space="preserve">
     <value>Team 1</value>
@@ -172,6 +193,6 @@
     <value>Team 2</value>
   </data>
   <data name="Timeleft" xml:space="preserve">
-    <value>Restzeit</value>
+    <value>Zeit</value>
   </data>
 </root>
