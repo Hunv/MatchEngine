@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MatchEngine.DatabaseModel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -21,7 +22,8 @@ namespace MatchEngine
                 var created = dbContext.Database.EnsureCreated();
                 if (created)
                 {
-                    //Do something
+                    dbContext.Settings.Add(new Setting() { Name = "SelectedTournament", Value = "0" });
+                    dbContext.SaveChanges();
                 }
             }
 

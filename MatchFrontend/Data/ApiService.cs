@@ -442,6 +442,45 @@ namespace MatchFrontend.Data
             }
         }
 
+        /// <summary>
+        /// Gets a Setting
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DtoSetting> GetSettingAsync(string name)
+        {
+            var setting = new DtoSetting();
+            HttpClient client = new HttpClient();
+
+            using (var jsonStream = await client.GetStreamAsync(_ServerBaseUrl + "setting/" + name))
+            {
+                var sR = new StreamReader(jsonStream);
+                var json = await sR.ReadToEndAsync();
+                sR.Close();
+
+                setting = JsonConvert.DeserializeObject<DtoSetting>(json, Helper.GetJsonSerializer());
+            }
+
+            return setting;
+        }
+
+        /// <summary>
+        /// Edit a Setting
+        /// </summary>
+        /// <param name="club"></param>
+        public async Task SetSettingAsync(DtoSetting setting)
+        {
+            var json = JsonConvert.SerializeObject(setting, Helper.GetJsonSerializer());
+
+            HttpClient client = new HttpClient();
+            var requestMessage = GetRequestMessage("PUT", "setting", json);
+            requestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = await client.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+            }
+        }
 
 
 

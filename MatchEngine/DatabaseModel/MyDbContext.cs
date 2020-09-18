@@ -15,8 +15,8 @@ namespace MatchEngine.DatabaseModel
         public DbSet<Team> Teams { get; set; }
         public DbSet<Team2Match> Teams2Matches { get; set; }
         public DbSet<Team2Tournament> Teams2Tournaments { get; set; }
-
         public DbSet<Club> Clubs { get; set; }
+        public DbSet<Setting> Settings { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

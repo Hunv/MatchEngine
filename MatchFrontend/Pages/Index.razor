@@ -53,25 +53,35 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        tournamentList = (await ApiSrv.GetTournamentListAsync()).ToArray();
-
-        if (Settings.SelectedTournamentId != 0)
-            NavigationManager.NavigateTo("/dashboard", true);
-    }
-
-    void TournamentChanged(ChangeEventArgs e)
-    {
-        //Set the global SelectedTournamentId Setting
-        Settings.SelectedTournamentId = Convert.ToInt32(e.Value);
-
+        //Get the selected Tournament Id
+        Settings.SelectedTournamentId = Convert.ToInt32((await ApiSrv.GetSettingAsync("SelectedTournament")).Value);
 
         if (Settings.SelectedTournamentId != 0)
         {
-            Settings.SelectedTournamentName = tournamentList.Single(x => x.Id == Settings.SelectedTournamentId).Name;
+            tournamentList = new DtoTournament[0]; //it is not null anymore and the page will load
             NavigationManager.NavigateTo("/dashboard", true);
         }
         else
         {
+            //Get all Tournaments
+            tournamentList = (await ApiSrv.GetTournamentListAsync()).ToArray();
+        }
+    }
+
+    private async void TournamentChanged(ChangeEventArgs e)
+    {
+        //Set the global SelectedTournamentId Setting
+        Settings.SelectedTournamentId = Convert.ToInt32(e.Value);
+
+        if (Settings.SelectedTournamentId != 0)
+        {
+            Settings.SelectedTournamentName = tournamentList.Single(x => x.Id == Settings.SelectedTournamentId).Name;
+            await ApiSrv.SetSettingAsync(new DtoSetting() { Name = "SelectedTournament", Value = Settings.SelectedTournamentId.ToString() });
+            NavigationManager.NavigateTo("/dashboard", true);
+        }
+        else
+        {
+            await ApiSrv.SetSettingAsync(new DtoSetting() { Name = "SelectedTournament", Value = "0" });
             Settings.SelectedTournamentName = "";
         }
     }
