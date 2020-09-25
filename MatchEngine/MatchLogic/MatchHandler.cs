@@ -50,6 +50,7 @@ namespace MatchEngine.MatchLogic
                     else
                     {
                         dbContext.Matches.Single(x => x.Id == MatchId).TimeLeftSeconds -= diff;
+                        Console.WriteLine("{2} Timeleft: {0}, (-{1}) ", dbContext.Matches.Single(x => x.Id == MatchId).TimeLeftSeconds, diff, MatchId);
                         dbContext.SaveChanges();
                     }
                 }
